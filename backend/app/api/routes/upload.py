@@ -3,10 +3,11 @@ import uuid
 import io
 from fastapi import APIRouter, Depends, UploadFile, File, HTTPException
 from app.api.deps import get_current_admin
+from app.core.config import settings
 
 router = APIRouter(tags=["upload"])
 
-UPLOAD_DIR = "uploads"
+UPLOAD_DIR = settings.UPLOAD_DIR
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 ALLOWED = {

@@ -9,6 +9,10 @@ class Settings(BaseSettings):
 
     DATABASE_URL: str = "sqlite:///./portfolio.db"
 
+    # Directory where uploaded files are stored. On Railway, point this at the
+    # persistent volume (e.g. /data/uploads) so uploads survive redeploys.
+    UPLOAD_DIR: str = "uploads"
+
     ADMIN_EMAIL: str = "admin@portfolio.dev"
     ADMIN_PASSWORD: str = "admin123"
 
