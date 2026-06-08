@@ -5,6 +5,7 @@
   "installCommand": "npm install",
   "framework": "vite",
   "rewrites": [
+    { "source": "/uploads/:path*", "destination": "https://api.ahsan-raza.dev/uploads/:path*" },
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "headers": [
