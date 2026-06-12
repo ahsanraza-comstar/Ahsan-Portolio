@@ -89,7 +89,7 @@ function FeaturedProject({ project }) {
           <div className="flex gap-4 pt-1">
             {project.demo_url && project.demo_url !== '#' && (
               <a href={project.demo_url} target="_blank" rel="noreferrer"
-                 className="inline-flex items-center gap-1.5 font-mono text-xs tracking-widest border border-[var(--amber-bright)] text-[var(--amber-bright)] px-4 py-2 hover:bg-[var(--amber-bright)] hover:text-black transition-all duration-200">
+                 className="inline-flex items-center gap-1.5 font-mono text-xs tracking-widest border border-[var(--btn-accent)] text-[var(--btn-accent)] px-4 py-2 hover:bg-[var(--btn-accent)] hover:text-black transition-all duration-200">
                 LIVE DEMO <ExternalLink size={11} />
               </a>
             )}
@@ -213,7 +213,7 @@ export default function Projects({ projects }) {
             onClick={() => setFilter(f)}
             className={`px-5 py-2 font-mono text-xs tracking-widest border-r border-[var(--border-subtle)] last:border-r-0 transition-all duration-200 ${
               filter === f
-                ? 'bg-[var(--amber-bright)] text-black'
+                ? 'bg-[var(--btn-accent)] text-black'
                 : 'text-[var(--text-muted)] hover:text-[var(--text-body)]'
             }`}
           >

@@ -92,7 +92,7 @@ function CropModal({ src, onConfirm, onCancel }) {
             </button>
             <button
               type="button" onClick={confirm}
-              className="px-4 py-2 font-mono text-xs border border-[var(--amber-bright)] text-[var(--amber-bright)] hover:bg-[var(--amber-bright)] hover:text-black transition-all flex items-center gap-2"
+              className="px-4 py-2 font-mono text-xs border border-[var(--btn-accent)] text-[var(--btn-accent)] hover:bg-[var(--btn-accent)] hover:text-black transition-all flex items-center gap-2"
             >
               <Check size={12} /> Apply Crop
             </button>
@@ -195,7 +195,7 @@ function FileUpload({ label, accept, currentUrl, onUploaded, type = 'file' }) {
                 <button
                   type="button"
                   onClick={(e) => { e.stopPropagation(); inputRef.current?.click() }}
-                  className="w-7 h-7 rounded-full bg-black/70 flex items-center justify-center text-white hover:bg-[var(--amber-bright)] hover:text-black transition-all"
+                  className="w-7 h-7 rounded-full bg-black/70 flex items-center justify-center text-white hover:bg-[var(--btn-accent)] hover:text-black transition-all"
                   title="Change & re-crop"
                 >
                   <Crop size={12} />

@@ -215,7 +215,7 @@ export default function Hero({ about, projects, certifications }) {
             >
               <button
                 onClick={() => document.querySelector('#projects')?.scrollIntoView({ behavior: 'smooth' })}
-                className="inline-flex items-center gap-2 px-6 py-2.5 font-mono text-xs tracking-widest border border-[var(--amber-bright)] text-[var(--amber-bright)] hover:bg-[var(--amber-bright)] hover:text-black transition-all duration-200"
+                className="inline-flex items-center gap-2 px-6 py-2.5 font-mono text-xs tracking-widest border border-[var(--btn-accent)] text-[var(--btn-accent)] hover:bg-[var(--btn-accent)] hover:text-black transition-all duration-200"
               >
                 VIEW PROJECTS <ArrowRight size={13} />
               </button>
@@ -257,7 +257,7 @@ export default function Hero({ about, projects, certifications }) {
                 onClick={() => resume && setShowPDF(true)}
                 className={`inline-flex items-center gap-2 px-5 py-2 font-mono text-xs tracking-widest border transition-all duration-200 ${
                   resume
-                    ? 'border-[var(--amber-bright)] text-[var(--amber-bright)] hover:bg-[var(--amber-bright)] hover:text-black'
+                    ? 'border-[var(--btn-accent)] text-[var(--btn-accent)] hover:bg-[var(--btn-accent)] hover:text-black'
                     : 'border-[var(--border-subtle)] text-[var(--text-muted)] cursor-not-allowed opacity-50'
                 }`}
                 title={resume ? 'View Resume' : 'Resume not uploaded yet'}

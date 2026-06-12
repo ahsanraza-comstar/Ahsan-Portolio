@@ -254,7 +254,7 @@ export default function Skills({ skills }) {
               className={`px-5 py-2.5 font-mono text-xs tracking-widest border-r border-[var(--border-subtle)]
                          last:border-r-0 transition-all duration-200 ${
                 activeTab === cat
-                  ? 'bg-[var(--amber-bright)] text-black'
+                  ? 'bg-[var(--btn-accent)] text-black'
                   : 'text-[var(--text-muted)] hover:text-[var(--text-body)]'
               }`}
             >

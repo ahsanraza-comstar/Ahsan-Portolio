@@ -37,7 +37,7 @@ export default function SkillsEditor() {
         <div className="flex flex-wrap gap-2">
           {['All', ...CATEGORIES].map(c => (
             <button key={c} onClick={() => setFilterCat(c)}
-              className={`px-3 py-1 rounded-full text-xs font-mono border transition-all ${filterCat === c ? 'border-[var(--amber-bright)] text-[var(--amber-bright)]' : 'border-[var(--border-subtle)] text-[var(--text-muted)]'}`}>
+              className={`px-3 py-1 rounded-full text-xs font-mono border transition-all ${filterCat === c ? 'border-[var(--btn-accent)] text-[var(--btn-accent)]' : 'border-[var(--border-subtle)] text-[var(--text-muted)]'}`}>
               {c}
             </button>
           ))}

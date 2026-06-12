@@ -24,7 +24,7 @@ function ToolBtn({ onClick, active, title, children }) {
       onMouseDown={(e) => { e.preventDefault(); onClick() }}
       className={`w-7 h-7 flex items-center justify-center rounded transition-all text-xs
         ${active
-          ? 'bg-[var(--amber-bright)] text-black'
+          ? 'bg-[var(--btn-accent)] text-black'
           : 'text-[var(--text-muted)] hover:text-white hover:bg-[var(--bg-raised)]'
         }`}
     >

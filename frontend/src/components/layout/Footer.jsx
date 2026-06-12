@@ -105,7 +105,7 @@ export default function Footer({ about }) {
               <li>
                 <button
                   onClick={() => scrollTo('#contact')}
-                  className="mt-2 inline-flex items-center gap-2 px-4 py-2 font-mono text-xs tracking-widest border border-[var(--amber-bright)] text-[var(--amber-bright)] hover:bg-[var(--amber-bright)] hover:text-black transition-all duration-200"
+                  className="mt-2 inline-flex items-center gap-2 px-4 py-2 font-mono text-xs tracking-widest border border-[var(--btn-accent)] text-[var(--btn-accent)] hover:bg-[var(--btn-accent)] hover:text-black transition-all duration-200"
                 >
                   HIRE ME →
                 </button>

@@ -338,7 +338,7 @@ export default function About({ about, projects, certifications }) {
               <a
                 href={about.resume_url}
                 download
-                className="inline-flex items-center gap-2 px-5 py-2.5 font-mono text-xs tracking-widest border border-[var(--amber-bright)] text-[var(--amber-bright)] hover:bg-[var(--amber-bright)] hover:text-black transition-all duration-200"
+                className="inline-flex items-center gap-2 px-5 py-2.5 font-mono text-xs tracking-widest border border-[var(--btn-accent)] text-[var(--btn-accent)] hover:bg-[var(--btn-accent)] hover:text-black transition-all duration-200"
               >
                 <Download size={12} /> RESUME
               </a>

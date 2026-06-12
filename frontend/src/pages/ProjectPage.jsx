@@ -141,7 +141,7 @@ export default function ProjectPage() {
               <div className="flex flex-wrap gap-3">
                 {project.demo_url && project.demo_url !== '#' && (
                   <a href={project.demo_url} target="_blank" rel="noreferrer"
-                    className="inline-flex items-center gap-2 px-5 py-2.5 font-mono text-xs tracking-widest border border-[var(--amber-bright)] text-[var(--amber-bright)] hover:bg-[var(--amber-bright)] hover:text-black transition-all duration-200">
+                    className="inline-flex items-center gap-2 px-5 py-2.5 font-mono text-xs tracking-widest border border-[var(--btn-accent)] text-[var(--btn-accent)] hover:bg-[var(--btn-accent)] hover:text-black transition-all duration-200">
                     LIVE DEMO <ExternalLink size={12} />
                   </a>
                 )}

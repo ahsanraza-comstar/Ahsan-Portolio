@@ -13,6 +13,9 @@
   --amber-glow:   rgba(74, 222, 128, 0.12);
   --amber-halo:   rgba(74, 222, 128, 0.05);
 
+  /* Buttons — yellow, matching the admin Sign-In button (Tailwind amber-bright) */
+  --btn-accent: #f5c518;
+
   /* Secondary — Soft Green */
   --teal-dim:    #1e3a2f;
   --teal-mid:    #166534;
