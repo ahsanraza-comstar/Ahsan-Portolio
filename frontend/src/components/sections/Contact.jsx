@@ -163,7 +163,7 @@ export default function Contact({ about }) {
                    error={errors.message?.message}
                    {...register('message', { required: 'Required' })} />
 
-            <Button variant="teal" type="submit" loading={isSubmitting} className="w-full justify-center group">
+            <Button variant="primary" type="submit" loading={isSubmitting} className="w-full justify-center group">
               <Send size={15} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               Send Message
               <ArrowRight size={14} className="opacity-0 group-hover:opacity-100 -ml-2 group-hover:ml-0 transition-all" />
