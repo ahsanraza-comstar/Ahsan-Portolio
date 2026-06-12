@@ -65,6 +65,8 @@ function ScrambleCounter({ text }) {
   const ref = useRef(null)
   const isVisible = useRef(false)
   const intervalRef = useRef(null)
+  const textRef = useRef(text)
+  textRef.current = text   // keep latest value for the mount-only observer callback
 
   const runScramble = (target) => {
     if (intervalRef.current) clearInterval(intervalRef.current)
@@ -86,7 +88,7 @@ function ScrambleCounter({ text }) {
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
         isVisible.current = true
-        runScramble(text)
+        runScramble(textRef.current)
       }
     }, { threshold: 0.1 })
     if (ref.current) observer.observe(ref.current)
