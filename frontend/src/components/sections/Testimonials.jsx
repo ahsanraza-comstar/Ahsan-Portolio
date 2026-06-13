@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { getTestimonials } from '../../lib/api'
-import { Star, Quote } from 'lucide-react'
+import { Star, StarHalf, Quote } from 'lucide-react'
 
 function TestimonialCard({ item }) {
   return (
@@ -9,14 +9,13 @@ function TestimonialCard({ item }) {
       <Quote size={24} className="text-green-500/30 flex-shrink-0" />
 
       {/* Stars */}
-      <div className="flex gap-1">
-        {Array.from({ length: 5 }).map((_, i) => (
-          <Star
-            key={i}
-            size={14}
-            className={i < item.rating ? 'text-amber-400 fill-amber-400' : 'text-white/15'}
-          />
-        ))}
+      <div className="flex items-center gap-1">
+        {Array.from({ length: 5 }).map((_, i) => {
+          if (item.rating >= i + 1) return <Star key={i} size={14} className="text-amber-400 fill-amber-400" />
+          if (item.rating >= i + 0.5) return <StarHalf key={i} size={14} className="text-amber-400 fill-amber-400" />
+          return <Star key={i} size={14} className="text-white/15" />
+        })}
+        {item.rating ? <span className="ml-1 text-amber-400/90 text-xs font-mono">{Number(item.rating).toFixed(1)}</span> : null}
       </div>
 
       {/* Content */}

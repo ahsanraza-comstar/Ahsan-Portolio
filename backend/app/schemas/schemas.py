@@ -222,7 +222,7 @@ class TestimonialBase(BaseModel):
     company: Optional[str] = ""
     avatar_url: Optional[str] = ""
     content: Optional[str] = ""
-    rating: Optional[int] = 5
+    rating: Optional[float] = 5
     order: Optional[int] = 0
     is_active: Optional[bool] = True
 

@@ -20,6 +20,17 @@ from app.api.routes import (
 # Create tables
 Base.metadata.create_all(bind=engine)
 
+# Idempotent migration: allow decimal testimonial ratings (older DBs used INTEGER).
+try:
+    from sqlalchemy import text
+    with engine.begin() as conn:
+        conn.execute(text(
+            "ALTER TABLE testimonials ALTER COLUMN rating TYPE double precision "
+            "USING rating::double precision"
+        ))
+except Exception:
+    pass
+
 # Rate limiter (keyed by IP)
 limiter = Limiter(key_func=get_remote_address, default_limits=["200/minute"])
 

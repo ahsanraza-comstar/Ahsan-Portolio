@@ -121,7 +121,7 @@ class Testimonial(Base):
     company = Column(String, default="")
     avatar_url = Column(String, default="")
     content = Column(Text, default="")
-    rating = Column(Integer, default=5)
+    rating = Column(Float, default=5)
     order = Column(Integer, default=0)
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime, default=datetime.utcnow)
