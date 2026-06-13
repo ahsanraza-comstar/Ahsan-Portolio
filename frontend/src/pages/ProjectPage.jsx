@@ -235,20 +235,24 @@ export default function ProjectPage() {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <p className="font-mono text-[10px] tracking-[0.3em] text-[var(--amber-bright)] uppercase mb-6">Gallery</p>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            <p className="font-mono text-[10px] tracking-[0.3em] text-[var(--amber-bright)] uppercase mb-6">
+              Gallery <span className="text-[var(--text-muted)] normal-case tracking-normal">— scroll →</span>
+            </p>
+            <div className="flex gap-4 overflow-x-auto pb-4 -mx-1 px-1 snap-x snap-mandatory">
               {images.map((url, i) => (
-                <div
+                <button
                   key={i}
-                  className="aspect-video overflow-hidden border border-[var(--border-subtle)] hover:border-[var(--amber-bright)] transition-colors cursor-pointer group"
+                  type="button"
                   onClick={() => setLightbox(i)}
+                  className="shrink-0 snap-start overflow-hidden rounded-lg border border-[var(--border-subtle)] hover:border-[var(--btn-accent)] transition-colors cursor-pointer group"
                 >
                   <img
                     src={url}
-                    alt=""
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    alt={`Screenshot ${i + 1}`}
+                    loading="lazy"
+                    className="h-[22rem] sm:h-[28rem] w-auto object-cover block group-hover:scale-[1.03] transition-transform duration-500"
                   />
-                </div>
+                </button>
               ))}
             </div>
           </motion.div>
