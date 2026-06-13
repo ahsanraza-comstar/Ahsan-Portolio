@@ -1,6 +1,14 @@
 from datetime import datetime, date
-from sqlalchemy import Column, Integer, String, Text, Boolean, DateTime, Date, JSON, Float
+from sqlalchemy import Column, Integer, String, Text, Boolean, DateTime, Date, JSON, Float, LargeBinary
 from app.core.database import Base
+
+
+class Upload(Base):
+    __tablename__ = "uploads"
+    filename = Column(String, primary_key=True, index=True)
+    content_type = Column(String, default="application/octet-stream")
+    data = Column(LargeBinary, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
 
 
 class About(Base):

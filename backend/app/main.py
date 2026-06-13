@@ -1,15 +1,16 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, Response
+from sqlalchemy.orm import Session
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
 import os
 
-from app.core.database import Base, engine
+from app.core.database import Base, engine, get_db
 from app.core.config import settings
+from app.models.models import Upload
 from app.api.routes import (
     auth, about, services, skills, certifications,
     projects, contact, upload, experience, testimonials,
@@ -60,9 +61,18 @@ async def add_security_headers(request: Request, call_next):
         response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
     return response
 
-# Static uploads (served at /uploads regardless of physical storage dir)
-os.makedirs(settings.UPLOAD_DIR, exist_ok=True)
-app.mount("/uploads", StaticFiles(directory=settings.UPLOAD_DIR), name="uploads")
+# Uploaded files are stored in the database (persist without any volume) and
+# served here at /uploads/<filename>.
+@app.get("/uploads/{filename}")
+def serve_upload(filename: str, db: Session = Depends(get_db)):
+    rec = db.query(Upload).filter(Upload.filename == filename).first()
+    if not rec:
+        raise HTTPException(status_code=404, detail="File not found")
+    return Response(
+        content=rec.data,
+        media_type=rec.content_type or "application/octet-stream",
+        headers={"Cache-Control": "public, max-age=31536000, immutable"},
+    )
 
 # Routers
 app.include_router(auth.router,             prefix="/api/auth")
@@ -81,12 +91,7 @@ app.include_router(analytics.router,        prefix="/api/analytics")
 
 @app.get("/")
 async def root():
-    from app.core.config import PERSIST_MARKER
-    on_volume = "/data/" in settings.DATABASE_URL
     return {
         "message": f"{settings.PROJECT_NAME} API is running",
-        "data_dir_present": os.path.isdir("/data"),
-        "persistence": "volume" if on_volume else "EPHEMERAL — data resets on redeploy",
-        "upload_dir": settings.UPLOAD_DIR,
-        "volume_first_written": PERSIST_MARKER,
+        "db": "postgres" if settings.DATABASE_URL.startswith("postgresql") else "sqlite",
     }

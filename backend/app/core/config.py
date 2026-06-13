@@ -31,45 +31,6 @@ class Settings(BaseSettings):
 
 settings = Settings()
 
-# ── Persistence safety net ──────────────────────────────────────────────────
-# If a Railway persistent volume is mounted at /data, store the SQLite DB and
-# uploads there automatically — regardless of the DATABASE_URL/UPLOAD_DIR env
-# values. This prevents data loss from a misconfigured DATABASE_URL (e.g. the
-# wrong number of slashes) as long as the volume is attached at /data.
-DATA_DIR = "/data"
-
-
-def _dir_writable(path):
-    """Test writability by actually writing a file (os.access is unreliable, esp. as root)."""
-    try:
-        os.makedirs(path, exist_ok=True)
-        _probe = os.path.join(path, ".write_test")
-        with open(_probe, "w") as _f:
-            _f.write("ok")
-        os.remove(_probe)
-        return True
-    except Exception:
-        return False
-
-
-DATA_VOLUME_MOUNTED = _dir_writable(DATA_DIR)
-if DATA_VOLUME_MOUNTED:
-    # Force the SQLite DB and uploads onto the /data volume so they persist.
-    settings.DATABASE_URL = "sqlite:////data/portfolio.db"
-    settings.UPLOAD_DIR = "/data/uploads"
-
-# Persistence marker: written once. If this timestamp SURVIVES a redeploy, the
-# volume is truly persistent; if it changes on every redeploy, /data is ephemeral
-# (not a real Railway volume) and data will keep resetting.
-PERSIST_MARKER = None
-if DATA_VOLUME_MOUNTED:
-    import time as _time
-    _marker_path = os.path.join(DATA_DIR, ".persist_marker")
-    try:
-        if not os.path.exists(_marker_path):
-            with open(_marker_path, "w") as _f:
-                _f.write(_time.strftime("%Y-%m-%d %H:%M:%SZ", _time.gmtime()))
-        with open(_marker_path) as _f:
-            PERSIST_MARKER = _f.read().strip()
-    except Exception as _e:
-        PERSIST_MARKER = f"error: {_e}"
+# Railway/Heroku-style Postgres URLs use "postgres://"; SQLAlchemy needs "postgresql://".
+if settings.DATABASE_URL.startswith("postgres://"):
+    settings.DATABASE_URL = settings.DATABASE_URL.replace("postgres://", "postgresql://", 1)
