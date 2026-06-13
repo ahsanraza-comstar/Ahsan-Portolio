@@ -5,9 +5,6 @@ import { useNavigate } from 'react-router-dom'
 import Section from '../layout/Section'
 import { useTilt } from '../../hooks/useTilt'
 
-const FILTERS = ['All', 'AI/ML', 'Web', 'Research']
-
-
 const PROJECT_CODE = {
   1: ['from langchain import RAGChain', 'chain = RAGChain(vectordb)', 'result = chain.query(q)'],
   2: ['bot = GitHubBot(gpt4)', 'pr = bot.review(pull_req)', 'bot.comment(pr.suggestions)'],
@@ -180,10 +177,11 @@ function ProjectCard({ project, index }) {
 
 export default function Projects({ projects }) {
   const [filter, setFilter] = useState('All')
-  const items    = projects || []
-  const featured = items.find(p => p.is_featured)
-  const rest     = items.filter(p => !p.is_featured)
-  const grid     = filter === 'All' ? rest : rest.filter(p => p.category === filter)
+  const items      = projects || []
+  const featured   = items.find(p => p.is_featured)
+  const rest       = items.filter(p => p.id !== featured?.id)
+  const categories = ['All', ...Array.from(new Set(rest.map(p => p.category).filter(Boolean)))]
+  const grid       = filter === 'All' ? rest : rest.filter(p => p.category === filter)
 
   return (
     <Section id="projects" bg="deep" reveal={false}>
@@ -206,21 +204,23 @@ export default function Projects({ projects }) {
       {featured && <FeaturedProject project={featured} />}
 
       {/* Filters */}
-      <div className="flex flex-wrap gap-0 mb-8 border border-[var(--border-subtle)]">
-        {FILTERS.map(f => (
-          <button
-            key={f}
-            onClick={() => setFilter(f)}
-            className={`px-5 py-2 font-mono text-xs tracking-widest border-r border-[var(--border-subtle)] last:border-r-0 transition-all duration-200 ${
-              filter === f
-                ? 'bg-[var(--btn-accent)] text-black'
-                : 'text-[var(--text-muted)] hover:text-[var(--text-body)]'
-            }`}
-          >
-            {f}
-          </button>
-        ))}
-      </div>
+      {categories.length > 1 && (
+        <div className="flex flex-wrap gap-0 mb-8 border border-[var(--border-subtle)]">
+          {categories.map(f => (
+            <button
+              key={f}
+              onClick={() => setFilter(f)}
+              className={`px-5 py-2 font-mono text-xs tracking-widest border-r border-[var(--border-subtle)] last:border-r-0 transition-all duration-200 ${
+                filter === f
+                  ? 'bg-[var(--btn-accent)] text-black'
+                  : 'text-[var(--text-muted)] hover:text-[var(--text-body)]'
+              }`}
+            >
+              {f}
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* Grid */}
       {items.length === 0 ? (
