@@ -37,12 +37,26 @@ settings = Settings()
 # values. This prevents data loss from a misconfigured DATABASE_URL (e.g. the
 # wrong number of slashes) as long as the volume is attached at /data.
 DATA_DIR = "/data"
-DATA_VOLUME_MOUNTED = os.path.isdir(DATA_DIR) and os.access(DATA_DIR, os.W_OK)
+
+
+def _dir_writable(path):
+    """Test writability by actually writing a file (os.access is unreliable, esp. as root)."""
+    try:
+        os.makedirs(path, exist_ok=True)
+        _probe = os.path.join(path, ".write_test")
+        with open(_probe, "w") as _f:
+            _f.write("ok")
+        os.remove(_probe)
+        return True
+    except Exception:
+        return False
+
+
+DATA_VOLUME_MOUNTED = _dir_writable(DATA_DIR)
 if DATA_VOLUME_MOUNTED:
-    if "/data/" not in settings.DATABASE_URL:
-        settings.DATABASE_URL = "sqlite:////data/portfolio.db"
-    if not settings.UPLOAD_DIR.startswith("/data"):
-        settings.UPLOAD_DIR = "/data/uploads"
+    # Force the SQLite DB and uploads onto the /data volume so they persist.
+    settings.DATABASE_URL = "sqlite:////data/portfolio.db"
+    settings.UPLOAD_DIR = "/data/uploads"
 
 # Persistence marker: written once. If this timestamp SURVIVES a redeploy, the
 # volume is truly persistent; if it changes on every redeploy, /data is ephemeral
