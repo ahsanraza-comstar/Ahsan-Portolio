@@ -81,10 +81,12 @@ app.include_router(analytics.router,        prefix="/api/analytics")
 
 @app.get("/")
 async def root():
+    from app.core.config import PERSIST_MARKER
     on_volume = "/data/" in settings.DATABASE_URL
     return {
         "message": f"{settings.PROJECT_NAME} API is running",
-        "data_volume_mounted": os.path.isdir("/data"),
-        "persistence": "volume (persistent)" if on_volume else "EPHEMERAL — data resets on redeploy",
+        "data_dir_present": os.path.isdir("/data"),
+        "persistence": "volume" if on_volume else "EPHEMERAL — data resets on redeploy",
         "upload_dir": settings.UPLOAD_DIR,
+        "volume_first_written": PERSIST_MARKER,
     }

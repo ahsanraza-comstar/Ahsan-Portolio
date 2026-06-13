@@ -43,3 +43,19 @@ if DATA_VOLUME_MOUNTED:
         settings.DATABASE_URL = "sqlite:////data/portfolio.db"
     if not settings.UPLOAD_DIR.startswith("/data"):
         settings.UPLOAD_DIR = "/data/uploads"
+
+# Persistence marker: written once. If this timestamp SURVIVES a redeploy, the
+# volume is truly persistent; if it changes on every redeploy, /data is ephemeral
+# (not a real Railway volume) and data will keep resetting.
+PERSIST_MARKER = None
+if DATA_VOLUME_MOUNTED:
+    import time as _time
+    _marker_path = os.path.join(DATA_DIR, ".persist_marker")
+    try:
+        if not os.path.exists(_marker_path):
+            with open(_marker_path, "w") as _f:
+                _f.write(_time.strftime("%Y-%m-%d %H:%M:%SZ", _time.gmtime()))
+        with open(_marker_path) as _f:
+            PERSIST_MARKER = _f.read().strip()
+    except Exception as _e:
+        PERSIST_MARKER = f"error: {_e}"
