@@ -1,3 +1,4 @@
+import os
 from pydantic_settings import BaseSettings
 
 
@@ -29,3 +30,16 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
+
+# ── Persistence safety net ──────────────────────────────────────────────────
+# If a Railway persistent volume is mounted at /data, store the SQLite DB and
+# uploads there automatically — regardless of the DATABASE_URL/UPLOAD_DIR env
+# values. This prevents data loss from a misconfigured DATABASE_URL (e.g. the
+# wrong number of slashes) as long as the volume is attached at /data.
+DATA_DIR = "/data"
+DATA_VOLUME_MOUNTED = os.path.isdir(DATA_DIR) and os.access(DATA_DIR, os.W_OK)
+if DATA_VOLUME_MOUNTED:
+    if "/data/" not in settings.DATABASE_URL:
+        settings.DATABASE_URL = "sqlite:////data/portfolio.db"
+    if not settings.UPLOAD_DIR.startswith("/data"):
+        settings.UPLOAD_DIR = "/data/uploads"

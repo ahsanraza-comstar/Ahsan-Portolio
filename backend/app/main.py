@@ -81,4 +81,10 @@ app.include_router(analytics.router,        prefix="/api/analytics")
 
 @app.get("/")
 async def root():
-    return {"message": f"{settings.PROJECT_NAME} API is running"}
+    on_volume = "/data/" in settings.DATABASE_URL
+    return {
+        "message": f"{settings.PROJECT_NAME} API is running",
+        "data_volume_mounted": os.path.isdir("/data"),
+        "persistence": "volume (persistent)" if on_volume else "EPHEMERAL — data resets on redeploy",
+        "upload_dir": settings.UPLOAD_DIR,
+    }
