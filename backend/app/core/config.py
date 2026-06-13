@@ -34,3 +34,8 @@ settings = Settings()
 # Railway/Heroku-style Postgres URLs use "postgres://"; SQLAlchemy needs "postgresql://".
 if settings.DATABASE_URL.startswith("postgres://"):
     settings.DATABASE_URL = settings.DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
+# Guard: if DATABASE_URL is unparseable (e.g. an unresolved "${{ ... }}" reference),
+# fall back to local SQLite so the app boots instead of crash-looping.
+if not (settings.DATABASE_URL.startswith("postgresql://") or settings.DATABASE_URL.startswith("sqlite:")):
+    settings.DATABASE_URL = "sqlite:///./portfolio.db"
