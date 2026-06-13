@@ -165,7 +165,9 @@ export default function Experience() {
           </div>
         </div>
 
-        <p className="text-center text-white/30 text-xs font-mono mt-4 md:hidden">← scroll to explore →</p>
+        {totalW > 1100 && (
+          <p className="text-center text-white/30 text-xs font-mono mt-4">← scroll to explore the timeline →</p>
+        )}
       </div>
     </section>
   )
