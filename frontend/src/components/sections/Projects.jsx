@@ -178,10 +178,10 @@ function ProjectCard({ project, index }) {
 export default function Projects({ projects }) {
   const [filter, setFilter] = useState('All')
   const items      = projects || []
-  const featured   = items.find(p => p.is_featured)
-  const rest       = items.filter(p => p.id !== featured?.id)
-  const categories = ['All', ...Array.from(new Set(rest.map(p => p.category).filter(Boolean)))]
-  const grid       = filter === 'All' ? rest : rest.filter(p => p.category === filter)
+  const categories = ['All', ...Array.from(new Set(items.map(p => p.category).filter(Boolean)))]
+  const visible    = filter === 'All' ? items : items.filter(p => p.category === filter)
+  const featured   = visible.find(p => p.is_featured)
+  const grid       = visible.filter(p => p.id !== featured?.id)
 
   return (
     <Section id="projects" bg="deep" reveal={false}>
@@ -200,12 +200,9 @@ export default function Projects({ projects }) {
         </p>
       </div>
 
-      {/* Featured */}
-      {featured && <FeaturedProject project={featured} />}
-
       {/* Filters */}
       {categories.length > 1 && (
-        <div className="flex flex-wrap gap-0 mb-8 border border-[var(--border-subtle)]">
+        <div className="flex flex-wrap gap-0 mb-10 border border-[var(--border-subtle)]">
           {categories.map(f => (
             <button
               key={f}
@@ -221,6 +218,9 @@ export default function Projects({ projects }) {
           ))}
         </div>
       )}
+
+      {/* Featured */}
+      {featured && <FeaturedProject project={featured} />}
 
       {/* Grid */}
       {items.length === 0 ? (
