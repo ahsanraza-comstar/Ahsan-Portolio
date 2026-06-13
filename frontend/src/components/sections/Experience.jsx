@@ -67,11 +67,11 @@ function JourneyCard({ item }) {
 
       {/* Description — bullets or paragraph */}
       {parts.length > 1 ? (
-        <ul className="space-y-1.5 text-white/60 text-[13px] leading-relaxed list-disc pl-4 marker:text-green-500/60">
+        <ul className="space-y-1.5 text-white/60 text-[13px] leading-relaxed text-justify list-disc pl-4 marker:text-green-500/60">
           {parts.map((p, i) => <DescItem key={i} text={p} />)}
         </ul>
       ) : parts.length === 1 ? (
-        <p className="text-white/60 text-[13px] leading-relaxed">{parts[0]}</p>
+        <p className="text-white/60 text-[13px] leading-relaxed text-justify">{parts[0]}</p>
       ) : null}
     </div>
   )
