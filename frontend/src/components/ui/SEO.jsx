@@ -1,5 +1,8 @@
 import { Helmet } from 'react-helmet-async'
 
+const SITE = 'https://ahsan-raza.dev'
+const abs = (path) => (path && path.startsWith('http') ? path : SITE + (path || ''))
+
 export default function SEO({
   title,
   description,
@@ -8,10 +11,10 @@ export default function SEO({
   type = 'website',
   article = null,
 }) {
-  const siteTitle   = title ? `${title} | Ahsan Raza` : 'Ahsan Raza — AI Engineer & Builder'
-  const siteDesc    = description || 'AI Engineer specializing in machine learning, LLMs, and full-stack AI applications.'
-  const siteImage   = image || '/og-image.png'
-  const siteUrl     = url || 'https://ahsanraza.dev'
+  const siteTitle = title ? `${title} | Ahsan Raza` : 'Ahsan Raza — AI Engineer & Builder'
+  const siteDesc  = description || 'AI Engineer specializing in machine learning, LLMs, and full-stack AI applications.'
+  const siteImage = abs(image || '/og-image.png')
+  const siteUrl   = abs(url || '/')
 
   return (
     <Helmet>

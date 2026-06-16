@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import { ArrowLeft, ExternalLink, Github, Calendar, Tag, ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { getProjects } from '../lib/api'
 import { slugify } from '../lib/slug'
+import SEO from '../components/ui/SEO'
 import { useTilt } from '../hooks/useTilt'
 import DOMPurify from 'dompurify'
 
@@ -86,6 +87,13 @@ export default function ProjectPage() {
 
   return (
     <div className="min-h-screen bg-[var(--bg-void)]">
+      <SEO
+        title={project.title}
+        description={project.description}
+        image={project.thumbnail_url || undefined}
+        url={`/projects/${slug}`}
+        type="article"
+      />
       {lightbox !== null && <Lightbox images={images} index={lightbox} onClose={() => setLightbox(null)} />}
 
       {/* Hero */}
