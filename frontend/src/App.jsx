@@ -129,7 +129,7 @@ export default function App() {
       <Suspense fallback={<PageSpin />}>
         <Routes>
           <Route path="/"                  element={<Portfolio />} />
-          <Route path="/projects/:id"      element={<ProjectPage />} />
+          <Route path="/projects/:slug"    element={<ProjectPage />} />
           <Route path="/blog/:slug"        element={<ArticlePage />} />
           <Route path="/admin"             element={<AdminLogin />} />
           <Route path="/admin/dashboard/*" element={

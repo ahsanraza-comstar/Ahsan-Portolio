@@ -3,7 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { motion } from 'framer-motion'
 import { ArrowLeft, ExternalLink, Github, Calendar, Tag, ChevronLeft, ChevronRight, X } from 'lucide-react'
-import { getProject } from '../lib/api'
+import { getProjects } from '../lib/api'
+import { slugify } from '../lib/slug'
 import { useTilt } from '../hooks/useTilt'
 import DOMPurify from 'dompurify'
 
@@ -52,15 +53,17 @@ function TechBadge({ name }) {
 }
 
 export default function ProjectPage() {
-  const { id } = useParams()
+  const { slug } = useParams()
   const navigate = useNavigate()
   const [lightbox, setLightbox] = useState(null)
   const { ref, onMouseMove, onMouseLeave } = useTilt(5)
 
-  const { data: project, isLoading, isError } = useQuery({
-    queryKey: ['project', id],
-    queryFn: () => getProject(id).then(r => r.data),
+  const { data: projects, isLoading, isError } = useQuery({
+    queryKey: ['projects'],
+    queryFn: () => getProjects().then(r => r.data),
+    staleTime: 300_000,
   })
+  const project = (projects || []).find(p => slugify(p.title) === slug || String(p.id) === slug)
 
   if (isLoading) return (
     <div className="min-h-screen bg-[var(--bg-void)] flex items-center justify-center">

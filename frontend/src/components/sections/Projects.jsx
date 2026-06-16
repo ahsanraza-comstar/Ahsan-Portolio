@@ -4,6 +4,7 @@ import { ExternalLink, Github, ArrowRight, Star } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import Section from '../layout/Section'
 import { useTilt } from '../../hooks/useTilt'
+import { slugify } from '../../lib/slug'
 
 const PROJECT_CODE = {
   1: ['from langchain import RAGChain', 'chain = RAGChain(vectordb)', 'result = chain.query(q)'],
@@ -42,7 +43,7 @@ function FeaturedProject({ project }) {
   const navigate = useNavigate()
   return (
     <motion.div
-      onClick={() => navigate(`/projects/${project.id}`)}
+      onClick={() => navigate(`/projects/${slugify(project.title)}`)}
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -111,7 +112,7 @@ function ProjectCard({ project, index }) {
       ref={ref}
       onMouseMove={onMouseMove}
       onMouseLeave={onMouseLeave}
-      onClick={() => navigate(`/projects/${project.id}`)}
+      onClick={() => navigate(`/projects/${slugify(project.title)}`)}
       initial={{ opacity: 0, y: 25 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-40px' }}
