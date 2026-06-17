@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useForm, Controller } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -111,6 +111,7 @@ const CATEGORIES = ['AI/ML', 'Web', 'Research', 'Mobile', 'DevOps', 'Other']
 export default function ProjectsEditor() {
   const qc = useQueryClient()
   const [editing, setEditing] = useState(null)
+  const formRef = useRef(null)
   const { data: projects = [] } = useQuery({ queryKey: ['projects-admin'], queryFn: () => getProjects().then(r => r.data) })
   const { register, handleSubmit, reset, setValue, watch, control } = useForm()
 
@@ -122,10 +123,13 @@ export default function ProjectsEditor() {
   function closeForm() { setEditing(null); reset() }
   function openEdit(p) {
     setEditing(p.id)
-    Object.entries(p).forEach(([k, v]) => {
-      if (k === 'tech_stack') setValue(k, v?.join(', '))
-      else setValue(k, v)
+    reset({
+      ...p,
+      tech_stack: Array.isArray(p.tech_stack) ? p.tech_stack.join(', ') : (p.tech_stack || ''),
+      images: Array.isArray(p.images) ? p.images : [],
     })
+    // The form renders at the top of the page — scroll it into view so the user sees it open.
+    setTimeout(() => formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60)
   }
 
   const onSubmit = (d) => {
@@ -151,7 +155,7 @@ export default function ProjectsEditor() {
       </div>
 
       {editing && (
-        <form onSubmit={handleSubmit(onSubmit)} className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-[var(--radius-md)] p-6 space-y-6">
+        <form ref={formRef} onSubmit={handleSubmit(onSubmit)} className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-[var(--radius-md)] p-6 space-y-6">
           <div className="flex justify-between items-center pb-2 border-b border-[var(--border-subtle)]">
             <h3 className="text-[var(--text-primary)] font-body font-semibold">{editing === 'new' ? 'New Project' : 'Edit Project'}</h3>
             <button type="button" onClick={closeForm} className="text-[var(--text-muted)] hover:text-white"><X size={16} /></button>
