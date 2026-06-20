@@ -9,6 +9,7 @@ import { useAnalytics } from './hooks/useAnalytics'
 import { getAbout, getServices, getSkills, getCertifications, getProjects } from './lib/api'
 
 import SEO from './components/ui/SEO'
+import Chatbot from './components/ui/Chatbot'
 import LoadingScreen from './components/ui/LoadingScreen'
 import Navbar from './components/layout/Navbar'
 import Footer from './components/layout/Footer'
@@ -138,6 +139,8 @@ export default function App() {
           <Route path="*"                  element={<NotFound />} />
         </Routes>
       </Suspense>
+
+      {!isAdmin && <Chatbot />}
     </ErrorBoundary>
   )
 }

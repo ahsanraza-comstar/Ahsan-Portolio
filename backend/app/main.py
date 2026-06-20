@@ -14,7 +14,7 @@ from app.models.models import Upload
 from app.api.routes import (
     auth, about, services, skills, certifications,
     projects, contact, upload, experience, testimonials,
-    articles, analytics,
+    articles, analytics, chat,
 )
 
 # Create tables
@@ -98,6 +98,7 @@ app.include_router(experience.router,       prefix="/api/experience")
 app.include_router(testimonials.router,     prefix="/api/testimonials")
 app.include_router(articles.router,         prefix="/api/articles")
 app.include_router(analytics.router,        prefix="/api/analytics")
+app.include_router(chat.router,             prefix="/api/chat")
 
 
 @app.get("/")

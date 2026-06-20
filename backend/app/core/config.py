@@ -23,6 +23,11 @@ class Settings(BaseSettings):
     MAIL_SERVER: str = "smtp.gmail.com"
     MAIL_PORT: int = 587
 
+    # NVIDIA NIM — portfolio chatbot (OpenAI-compatible API)
+    NVIDIA_API_KEY: str = ""
+    NVIDIA_MODEL: str = "meta/llama-3.1-8b-instruct"
+    NVIDIA_BASE_URL: str = "https://integrate.api.nvidia.com/v1"
+
     ALLOWED_ORIGINS: str = "http://localhost:5173,http://localhost:3000,http://127.0.0.1:5173"
 
     class Config:
