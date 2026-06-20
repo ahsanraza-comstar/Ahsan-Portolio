@@ -10,6 +10,7 @@ import { getAbout, getServices, getSkills, getCertifications, getProjects } from
 
 import SEO from './components/ui/SEO'
 import Chatbot from './components/ui/Chatbot'
+import CommandPalette from './components/ui/CommandPalette'
 import LoadingScreen from './components/ui/LoadingScreen'
 import Navbar from './components/layout/Navbar'
 import Footer from './components/layout/Footer'
@@ -143,6 +144,7 @@ export default function App() {
       </Suspense>
 
       {!isAdmin && <Chatbot />}
+      {!isAdmin && <CommandPalette />}
     </ErrorBoundary>
   )
 }

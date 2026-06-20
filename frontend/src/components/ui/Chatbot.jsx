@@ -30,6 +30,12 @@ export default function Chatbot() {
   useEffect(() => {
     try { localStorage.setItem(STORE_KEY, JSON.stringify(messages.slice(-30))) } catch {}
   }, [messages])
+  // Allow other components (e.g. the command palette) to open the chat
+  useEffect(() => {
+    const openIt = () => setOpen(true)
+    window.addEventListener('open-chat', openIt)
+    return () => window.removeEventListener('open-chat', openIt)
+  }, [])
 
   function autoGrow(el) {
     if (!el) return
