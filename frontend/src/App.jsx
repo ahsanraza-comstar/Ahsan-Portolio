@@ -22,6 +22,7 @@ import Services from './components/sections/Services'
 import Skills from './components/sections/Skills'
 import Certifications from './components/sections/Certifications'
 import Projects from './components/sections/Projects'
+import GitHubStats from './components/sections/GitHubStats'
 import Contact from './components/sections/Contact'
 
 // Below-fold sections — lazy
@@ -89,6 +90,7 @@ function Portfolio() {
         <Skills        skills={skills} />
         <Certifications certifications={certifications} />
         <Projects      projects={projects} />
+        <GitHubStats   username={(about?.github_url || '').replace(/\/+$/, '').split('/').pop() || 'AhsanRaza-dev'} />
         <Suspense fallback={null}>
           <Experience />
           <Testimonials />
