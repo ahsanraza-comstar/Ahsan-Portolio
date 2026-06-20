@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Sparkles, X, Send, Bot } from 'lucide-react'
+import { Sparkles, X, Send, Bot, RotateCcw } from 'lucide-react'
+import ReactMarkdown from 'react-markdown'
 import { chat } from '../../lib/api'
 
 const STARTERS = [
@@ -9,15 +10,32 @@ const STARTERS = [
   "What's his tech stack?",
   'Is he open to work?',
 ]
+const STORE_KEY = 'ahsan_chat_v1'
+
+const mdComponents = {
+  a: ({ node, ...props }) => <a {...props} target="_blank" rel="noreferrer" />,
+}
 
 export default function Chatbot() {
   const [open, setOpen] = useState(false)
-  const [messages, setMessages] = useState([])
+  const [messages, setMessages] = useState(() => {
+    try { return JSON.parse(localStorage.getItem(STORE_KEY)) || [] } catch { return [] }
+  })
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
   const endRef = useRef(null)
+  const taRef = useRef(null)
 
   useEffect(() => { endRef.current?.scrollIntoView({ behavior: 'smooth' }) }, [messages, loading, open])
+  useEffect(() => {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(messages.slice(-30))) } catch {}
+  }, [messages])
+
+  function autoGrow(el) {
+    if (!el) return
+    el.style.height = 'auto'
+    el.style.height = Math.min(el.scrollHeight, 120) + 'px'
+  }
 
   async function send(text) {
     const q = (text ?? input).trim()
@@ -25,6 +43,7 @@ export default function Chatbot() {
     const history = messages.slice(-8)
     setMessages(m => [...m, { role: 'user', content: q }])
     setInput('')
+    if (taRef.current) taRef.current.style.height = 'auto'
     setLoading(true)
     try {
       const res = await chat({ message: q, history })
@@ -35,6 +54,11 @@ export default function Chatbot() {
     } finally {
       setLoading(false)
     }
+  }
+
+  function clearChat() {
+    setMessages([])
+    try { localStorage.removeItem(STORE_KEY) } catch {}
   }
 
   return (
@@ -66,6 +90,9 @@ export default function Chatbot() {
                 <p className="text-white text-sm font-semibold leading-tight">Ask about Ahsan</p>
                 <p className="text-white/40 text-[11px] font-mono">AI assistant · NVIDIA NIM</p>
               </div>
+              {messages.length > 0 && (
+                <button onClick={clearChat} aria-label="New chat" title="New chat" className="text-white/40 hover:text-white"><RotateCcw size={15} /></button>
+              )}
               <button onClick={() => setOpen(false)} aria-label="Close" className="text-white/40 hover:text-white"><X size={18} /></button>
             </div>
 
@@ -90,13 +117,22 @@ export default function Chatbot() {
 
               {messages.map((m, i) => (
                 <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                  <div className={`max-w-[85%] rounded-2xl px-3.5 py-2 text-sm leading-relaxed whitespace-pre-wrap ${
-                    m.role === 'user'
-                      ? 'bg-[var(--btn-accent)] text-black rounded-br-sm'
-                      : 'bg-white/[0.05] text-white/85 border border-white/10 rounded-bl-sm'
-                  }`}>
-                    {m.content}
-                  </div>
+                  {m.role === 'user' ? (
+                    <div className="max-w-[85%] rounded-2xl rounded-br-sm px-3.5 py-2 text-sm leading-relaxed whitespace-pre-wrap bg-[var(--btn-accent)] text-black">
+                      {m.content}
+                    </div>
+                  ) : (
+                    <div className="max-w-[88%] rounded-2xl rounded-bl-sm px-3.5 py-2.5 text-sm leading-relaxed bg-white/[0.05] text-white/85 border border-white/10
+                      [&_p]:mb-2 [&_p:last-child]:mb-0
+                      [&_ul]:list-disc [&_ul]:pl-4 [&_ul]:mb-2 [&_ul]:space-y-1
+                      [&_ol]:list-decimal [&_ol]:pl-4 [&_ol]:mb-2 [&_ol]:space-y-1
+                      [&_li]:marker:text-[var(--btn-accent)]/60
+                      [&_strong]:text-white [&_strong]:font-semibold
+                      [&_a]:text-[var(--btn-accent)] [&_a]:underline [&_a]:break-words
+                      [&_code]:bg-black/30 [&_code]:px-1 [&_code]:rounded [&_code]:text-[var(--btn-accent)] [&_code]:text-xs">
+                      <ReactMarkdown components={mdComponents}>{m.content}</ReactMarkdown>
+                    </div>
+                  )}
                 </div>
               ))}
 
@@ -113,13 +149,16 @@ export default function Chatbot() {
             </div>
 
             {/* Input */}
-            <form onSubmit={(e) => { e.preventDefault(); send() }} className="p-3 border-t border-white/10 flex items-center gap-2">
-              <input
+            <form onSubmit={(e) => { e.preventDefault(); send() }} className="p-3 border-t border-white/10 flex items-end gap-2">
+              <textarea
+                ref={taRef}
                 value={input}
-                onChange={(e) => setInput(e.target.value)}
+                onChange={(e) => { setInput(e.target.value); autoGrow(e.target) }}
+                onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send() } }}
                 placeholder="Ask a question..."
+                rows={1}
                 maxLength={1000}
-                className="flex-1 bg-[var(--bg-surface)] border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[var(--btn-accent)]/50"
+                className="flex-1 resize-none bg-[var(--bg-surface)] border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[var(--btn-accent)]/50 max-h-[120px]"
               />
               <button
                 type="submit"
