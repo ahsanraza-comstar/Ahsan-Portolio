@@ -31,7 +31,7 @@ export const getExperiences    = () => api.get('/api/experience')
 export const getTestimonials   = () => api.get('/api/testimonials')
 export const getArticles       = () => api.get('/api/articles')
 export const getArticle        = (slug) => api.get(`/api/articles/${slug}`)
-export const chat              = (data) => api.post('/api/chat', data)
+export const chat              = (data) => api.post('/api/chat', data, { timeout: 90000 })
 
 // Auth
 export const adminLogin = (creds) =>

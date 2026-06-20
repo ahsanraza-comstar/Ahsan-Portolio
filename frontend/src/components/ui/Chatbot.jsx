@@ -46,10 +46,21 @@ export default function Chatbot() {
     if (taRef.current) taRef.current.style.height = 'auto'
     setLoading(true)
     try {
-      const res = await chat({ message: q, history })
+      let res
+      for (let attempt = 0; attempt < 3; attempt++) {
+        try { res = await chat({ message: q, history }); break }
+        catch (err) {
+          const status = err.response?.status
+          const retriable = !err.response || status >= 500           // network/timeout or server error
+          if (attempt < 2 && retriable) { await new Promise(r => setTimeout(r, 700 * (attempt + 1))); continue }
+          throw err
+        }
+      }
       setMessages(m => [...m, { role: 'assistant', content: res.data.answer }])
     } catch (e) {
-      const msg = e.response?.data?.detail || 'Sorry, the assistant is unavailable right now. Please try again.'
+      const msg = e.response?.status === 429
+        ? "I'm getting a lot of questions right now — please wait a few seconds and try again."
+        : (e.response?.data?.detail || "Hmm, I couldn't reach the assistant. Please try again in a moment.")
       setMessages(m => [...m, { role: 'assistant', content: msg }])
     } finally {
       setLoading(false)

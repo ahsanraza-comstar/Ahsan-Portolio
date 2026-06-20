@@ -131,14 +131,20 @@ async def chat(request: Request, body: ChatRequest, db: Session = Depends(get_db
             "Accept": "application/json",
         },
     )
-    try:
-        with urllib.request.urlopen(req, timeout=60) as r:
-            data = json.loads(r.read())
-        answer = data["choices"][0]["message"]["content"].strip()
-        return {"answer": answer}
-    except urllib.error.HTTPError as e:
-        print(f"[Chat] NVIDIA API error {e.code}: {e.read().decode()[:300]}")
-        raise HTTPException(status_code=502, detail="The assistant is temporarily unavailable. Please try again.")
-    except Exception as e:
-        print(f"[Chat] error: {e}")
-        raise HTTPException(status_code=502, detail="The assistant is temporarily unavailable. Please try again.")
+    last_err = None
+    for attempt in range(3):
+        try:
+            with urllib.request.urlopen(req, timeout=45) as r:
+                data = json.loads(r.read())
+            return {"answer": data["choices"][0]["message"]["content"].strip()}
+        except urllib.error.HTTPError as e:
+            body = e.read().decode()[:300]
+            print(f"[Chat] NVIDIA error {e.code} (attempt {attempt + 1}): {body}")
+            last_err = e
+            if e.code < 500 and e.code != 429:
+                break  # bad request / auth — retrying won't help
+        except Exception as e:
+            print(f"[Chat] error (attempt {attempt + 1}): {e}")
+            last_err = e
+    print(f"[Chat] giving up after retries: {last_err}")
+    raise HTTPException(status_code=502, detail="The assistant is temporarily unavailable. Please try again.")
