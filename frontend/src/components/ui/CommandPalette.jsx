@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 import {
-  Search, Home, User, Wrench, Layers, FolderGit2, Github, Briefcase,
+  Home, User, Wrench, Layers, FolderGit2, Github, Briefcase,
   Quote, Mail, FileText, Linkedin, Sparkles, ArrowRight,
 } from 'lucide-react'
 import { getProjects, getAbout } from '../../lib/api'
@@ -98,23 +98,33 @@ export default function CommandPalette() {
   let lastGroup = null
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-start justify-center pt-[12vh] px-4 bg-black/60 backdrop-blur-sm" onClick={() => setOpen(false)}>
-      <div className="w-full max-w-lg rounded-2xl border border-white/10 bg-[var(--bg-deep)] shadow-2xl overflow-hidden" onClick={e => e.stopPropagation()}>
-        <div className="flex items-center gap-3 px-4 py-3 border-b border-white/10">
-          <Search size={16} className="text-white/40" />
+    <div className="fixed inset-0 z-[60] flex items-start justify-center pt-[12vh] px-4 bg-black/70 backdrop-blur-sm" onClick={() => setOpen(false)}>
+      <div className="w-full max-w-xl rounded-xl border border-white/10 bg-[#0c0c0e] shadow-2xl overflow-hidden font-mono" onClick={e => e.stopPropagation()}>
+        {/* Title bar */}
+        <div className="relative flex items-center gap-2 px-4 py-2.5 bg-[#1b1b1e] border-b border-white/10">
+          <span className="w-3 h-3 rounded-full bg-[#ff5f57]" />
+          <span className="w-3 h-3 rounded-full bg-[#febc2e]" />
+          <span className="w-3 h-3 rounded-full bg-[#28c840]" />
+          <span className="absolute left-1/2 -translate-x-1/2 text-[11px] text-white/40">ahsan@portfolio — zsh</span>
+        </div>
+
+        {/* Prompt */}
+        <div className="flex items-center gap-2 px-4 py-3 text-sm border-b border-white/5">
+          <span className="text-[var(--btn-accent)]">❯</span>
+          <span className="text-emerald-400">~</span>
           <input
             ref={inputRef}
             value={query}
             onChange={e => setQuery(e.target.value)}
             onKeyDown={onKeyDown}
-            placeholder="Search sections, projects, actions..."
-            className="flex-1 bg-transparent text-white text-sm placeholder:text-white/30 focus:outline-none"
+            placeholder="type to search commands…"
+            className="flex-1 bg-transparent text-white/90 placeholder:text-white/25 focus:outline-none caret-[var(--btn-accent)]"
           />
-          <kbd className="text-[10px] font-mono text-white/30 border border-white/10 rounded px-1.5 py-0.5">ESC</kbd>
         </div>
 
-        <div ref={listRef} className="max-h-[50vh] overflow-y-auto py-2">
-          {filtered.length === 0 && <p className="px-4 py-6 text-center text-white/40 text-sm">No results</p>}
+        {/* Output / list */}
+        <div ref={listRef} className="max-h-[52vh] overflow-y-auto py-1.5 text-[13px]">
+          {filtered.length === 0 && <p className="px-4 py-6 text-white/30">~ no matching command found</p>}
           {filtered.map((c) => {
             idx++
             const showHeader = c.group !== lastGroup
@@ -123,24 +133,27 @@ export default function CommandPalette() {
             const Icon = c.icon || ArrowRight
             return (
               <div key={c.id}>
-                {showHeader && <p className="px-4 pt-3 pb-1 text-[10px] font-mono uppercase tracking-widest text-white/30">{c.group}</p>}
+                {showHeader && <p className="px-4 pt-3 pb-1 text-[10px] uppercase tracking-widest text-emerald-400/50"># {c.group}</p>}
                 <button
                   data-idx={i}
                   onMouseEnter={() => setActive(i)}
                   onClick={() => run(c)}
-                  className={`w-full flex items-center gap-3 px-4 py-2 text-left text-sm transition-colors ${i === active ? 'bg-white/[0.06] text-white' : 'text-white/70'}`}
+                  className={`w-full flex items-center gap-2.5 px-4 py-1.5 text-left ${i === active ? 'bg-[var(--btn-accent)]/10 text-white' : 'text-white/65'}`}
                 >
-                  <Icon size={15} className={i === active ? 'text-[var(--btn-accent)]' : 'text-white/40'} />
+                  <span className={`w-3 shrink-0 ${i === active ? 'text-[var(--btn-accent)]' : 'text-transparent'}`}>❯</span>
+                  <Icon size={13} className={i === active ? 'text-[var(--btn-accent)]' : 'text-white/35'} />
                   <span className="flex-1 truncate">{c.label}</span>
-                  {i === active && <ArrowRight size={13} className="text-white/30" />}
                 </button>
               </div>
             )
           })}
         </div>
 
-        <div className="px-4 py-2 border-t border-white/10 flex items-center gap-4 text-[10px] font-mono text-white/30">
-          <span>↑↓ navigate</span><span>↵ select</span><span className="ml-auto">Ctrl / ⌘ + K</span>
+        {/* Footer */}
+        <div className="px-4 py-2 border-t border-white/10 bg-[#141416] flex items-center gap-4 text-[10px] text-white/30">
+          <span><span className="text-white/50">↑↓</span> navigate</span>
+          <span><span className="text-white/50">↵</span> run</span>
+          <span className="ml-auto"><span className="text-white/50">esc</span> close</span>
         </div>
       </div>
     </div>
