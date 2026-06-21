@@ -1,14 +1,16 @@
 import { motion } from 'framer-motion'
-import { Github, Linkedin, Twitter, ArrowUp, Mail, MapPin } from 'lucide-react'
+import { Github, Linkedin, Twitter, ArrowUp, Mail, MapPin, CalendarClock } from 'lucide-react'
 import logoUrl from '../../assets/logo.png'
 import { whatsappLink, WhatsAppIcon } from '../../lib/whatsapp'
 
 const NAV_LINKS = [
-  { label: 'About',    href: '#about' },
-  { label: 'Services', href: '#services' },
-  { label: 'Skills',   href: '#skills' },
-  { label: 'Projects', href: '#projects' },
-  { label: 'Contact',  href: '#contact' },
+  { label: 'About',      href: '#about' },
+  { label: 'Services',   href: '#services' },
+  { label: 'Skills',     href: '#skills' },
+  { label: 'Projects',   href: '#projects' },
+  { label: 'Experience', href: '#experience' },
+  { label: 'Blog',       href: '#blog' },
+  { label: 'Contact',    href: '#contact' },
 ]
 
 export default function Footer({ about }) {
@@ -34,21 +36,53 @@ export default function Footer({ about }) {
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] pointer-events-none"
         style={{ background: 'radial-gradient(ellipse at 50% 100%, rgba(74,222,128,0.05) 0%, transparent 70%)' }} />
 
-      {/* Main content */}
-      <div className="relative max-w-7xl mx-auto px-6 md:px-12 lg:px-20 pt-16 pb-10">
+      <div className="relative max-w-7xl mx-auto px-6 md:px-12 lg:px-20 pt-14 pb-8">
 
-        {/* Top row */}
-        <div className="grid md:grid-cols-3 gap-12 mb-14">
+        {/* ── CTA band ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 pb-12 mb-12 border-b border-[var(--border-subtle)]"
+        >
+          <div>
+            <p className="font-mono text-[10px] tracking-[0.3em] text-[var(--amber-bright)] uppercase mb-3">Let&apos;s connect</p>
+            <h2 className="font-display font-bold text-white leading-tight" style={{ fontSize: 'clamp(1.6rem, 3vw, 2.5rem)' }}>
+              Have a project in mind?<br />
+              Let&apos;s build something{' '}
+              <span className="font-mono text-[var(--amber-bright)]">together.</span>
+            </h2>
+          </div>
+          <div className="flex flex-wrap gap-3 shrink-0">
+            <button
+              onClick={() => (about?.booking_url ? window.dispatchEvent(new Event('open-booking')) : scrollTo('#contact'))}
+              className="inline-flex items-center gap-2 px-5 py-2.5 font-mono text-xs tracking-widest rounded-md border border-[var(--btn-accent)] text-[var(--btn-accent)] hover:bg-[var(--btn-accent)] hover:text-black transition-all duration-200"
+            >
+              <CalendarClock size={14} /> BOOK A CALL
+            </button>
+            <a
+              href={whatsappLink()}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 px-5 py-2.5 font-mono text-xs tracking-widest rounded-md border border-[var(--border-subtle)] text-[var(--text-body)] hover:border-[#25D366] hover:text-[#25D366] transition-all duration-200"
+            >
+              <WhatsAppIcon className="w-3.5 h-3.5" /> WHATSAPP
+            </a>
+          </div>
+        </motion.div>
+
+        {/* ── Columns ── */}
+        <div className="grid md:grid-cols-3 gap-10 mb-10">
 
           {/* Brand */}
-          <div className="space-y-5">
+          <div className="space-y-4">
             <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
               <img src={logoUrl} alt="Logo" className="h-10 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity duration-300" />
             </button>
             <p className="text-[var(--text-muted)] text-sm leading-relaxed font-body max-w-xs">
               Building production-grade AI systems at the intersection of LLMs, full-stack engineering, and real-world impact.
             </p>
-            {/* Socials */}
             <div className="flex items-center gap-3 pt-1">
               {socials.map(({ href, Icon, label }) => (
                 <motion.a
@@ -71,17 +105,16 @@ export default function Footer({ about }) {
             </div>
           </div>
 
-          {/* Quick links */}
+          {/* Navigation */}
           <div>
             <p className="font-mono text-[10px] tracking-[0.3em] text-[var(--amber-bright)] uppercase mb-5">Navigation</p>
-            <ul className="space-y-3">
+            <ul className="grid grid-cols-2 gap-x-6 gap-y-2.5">
               {NAV_LINKS.map(({ label, href }) => (
                 <li key={href}>
                   <button
                     onClick={() => scrollTo(href)}
-                    className="font-mono text-xs text-[var(--text-muted)] hover:text-[var(--amber-bright)] transition-colors duration-200 flex items-center gap-2 group"
+                    className="font-mono text-xs text-[var(--text-muted)] hover:text-[var(--amber-bright)] hover:translate-x-1 transition-all duration-200"
                   >
-                    <span className="w-3 h-px bg-[var(--border-subtle)] group-hover:bg-[var(--amber-bright)] group-hover:w-5 transition-all duration-300" />
                     {label}
                   </button>
                 </li>
@@ -111,13 +144,9 @@ export default function Footer({ about }) {
                   <span className="font-mono text-xs text-[var(--text-muted)]">{about.location}</span>
                 </li>
               )}
-              <li>
-                <button
-                  onClick={() => scrollTo('#contact')}
-                  className="mt-2 inline-flex items-center gap-2 px-4 py-2 font-mono text-xs tracking-widest border border-[var(--btn-accent)] text-[var(--btn-accent)] hover:bg-[var(--btn-accent)] hover:text-black transition-all duration-200"
-                >
-                  HIRE ME →
-                </button>
+              <li className="flex items-center gap-2 pt-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#28c840]" style={{ boxShadow: '0 0 6px #28c840' }} />
+                <span className="font-mono text-[11px] text-[var(--text-muted)]">Available for new projects</span>
               </li>
             </ul>
           </div>
