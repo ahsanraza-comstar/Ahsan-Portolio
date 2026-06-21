@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { getArticle } from '../lib/api'
-import { ArrowLeft, Calendar, Tag } from 'lucide-react'
+import { ArrowLeft, Calendar, Tag, X } from 'lucide-react'
 import SEO from '../components/ui/SEO'
 import DOMPurify from 'dompurify'
 
@@ -62,19 +62,22 @@ export default function ArticlePage() {
         type="article"
         article={{ publishedAt: article.published_at, tags: article.tags }}
       />
-      {/* Nav back */}
-      <div className="fixed top-0 left-0 right-0 z-40 bg-[#0a0a0f]/80 backdrop-blur-md border-b border-white/5">
-        <div className="max-w-3xl mx-auto px-4 py-4">
+      <div className="max-w-3xl mx-auto px-4 pt-12 pb-20">
+        {/* Back — macOS window controls (red dot goes back) */}
+        <div className="group flex items-center gap-2 mb-10 w-fit">
           <button
-            onClick={() => navigate(-1)}
-            className="flex items-center gap-2 text-white/50 hover:text-green-400 transition-colors text-sm"
+            onClick={() => { navigate('/'); setTimeout(() => document.querySelector('#blog')?.scrollIntoView({ behavior: 'smooth' }), 100) }}
+            aria-label="Back to blog"
+            title="Back to blog"
+            className="w-3.5 h-3.5 rounded-full bg-[#ff5f57] flex items-center justify-center hover:brightness-110 transition"
           >
-            <ArrowLeft size={16} /> Back
+            <X size={9} strokeWidth={3} className="text-black/70 opacity-0 group-hover:opacity-100" />
           </button>
+          <span className="w-3.5 h-3.5 rounded-full bg-[#febc2e]" />
+          <span className="w-3.5 h-3.5 rounded-full bg-[#28c840]" />
+          <span className="ml-3 font-mono text-[11px] text-white/40">back to blog</span>
         </div>
-      </div>
 
-      <div className="max-w-3xl mx-auto px-4 pt-28 pb-20">
         {/* Tags */}
         {article.tags?.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-6">
