@@ -61,18 +61,12 @@ export default function BookingModal() {
             <CalendarClock size={12} className="text-[var(--btn-accent)]" /> book-a-call — zsh
           </span>
         </div>
-        {/* Calendly renders its own scrollbar inside a cross-origin iframe, which
-            can't be recolored. We clip it by making the iframe slightly wider than
-            its container so the native scrollbar falls outside the visible area
-            (wheel/trackpad scrolling still works). */}
-        <div className="flex-1 overflow-hidden">
-          <iframe
-            src={themedUrl(url)}
-            title="Schedule a call"
-            className="block h-full bg-[#0d0d0f]"
-            style={{ border: 'none', width: 'calc(100% + 17px)' }}
-          />
-        </div>
+        <iframe
+          src={themedUrl(url)}
+          title="Schedule a call"
+          className="flex-1 w-full bg-[#0d0d0f]"
+          style={{ border: 'none' }}
+        />
       </div>
     </div>
   )
