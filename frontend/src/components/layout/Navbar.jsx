@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useQuery } from '@tanstack/react-query'
 import { Menu, X } from 'lucide-react'
 import logoUrl from '../../assets/logo.png'
+import { getAbout } from '../../lib/api'
 
 const ALL_NAV_LINKS = [
   { href: '#about',        label: 'ABOUT' },
@@ -64,6 +66,16 @@ export default function Navbar() {
     document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' })
   }
 
+  // Primary CTA: open the booking scheduler if a link is set, else go to Contact.
+  const { data: about } = useQuery({ queryKey: ['about'], queryFn: () => getAbout().then(r => r.data), staleTime: 300_000 })
+  const hasBooking = !!about?.booking_url?.trim()
+  const ctaLabel = hasBooking ? 'BOOK A CALL' : 'HIRE ME →'
+  const onCTA = () => {
+    setMobileOpen(false)
+    if (hasBooking) window.dispatchEvent(new Event('open-booking'))
+    else scrollTo('#contact')
+  }
+
   return (
     <>
       <motion.nav
@@ -105,10 +117,10 @@ export default function Navbar() {
           {/* Right actions */}
           <div className="flex items-center gap-3">
             <button
-              onClick={() => scrollTo('#contact')}
+              onClick={onCTA}
               className="hidden md:flex items-center gap-1.5 font-mono text-xs tracking-widest border border-[var(--btn-accent)] text-[var(--btn-accent)] px-4 py-2 hover:bg-[var(--btn-accent)] hover:text-black transition-all duration-200"
             >
-              HIRE ME →
+              {ctaLabel}
             </button>
 
             {/* Mobile burger */}
@@ -154,10 +166,10 @@ export default function Navbar() {
                 </motion.button>
               ))}
               <button
-                onClick={() => scrollTo('#contact')}
+                onClick={onCTA}
                 className="mt-4 font-mono text-xs tracking-widest border border-[var(--btn-accent)] text-[var(--btn-accent)] px-4 py-2.5 text-center hover:bg-[var(--btn-accent)] hover:text-black transition-all"
               >
-                HIRE ME →
+                {ctaLabel}
               </button>
             </motion.div>
           </>
