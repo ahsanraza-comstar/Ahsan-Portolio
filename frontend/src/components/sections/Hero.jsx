@@ -4,6 +4,7 @@ import { TypeAnimation } from 'react-type-animation'
 import { Github, Linkedin, Twitter, ArrowRight, Play } from 'lucide-react'
 import NeuralCanvas from '../ui/NeuralCanvas'
 import ResumePDFViewer from '../ui/ResumePDFViewer'
+import { whatsappLink, WhatsAppIcon } from '../../lib/whatsapp'
 
 const BRANDS = ['Python', 'FastAPI', 'LangChain', 'React', 'PyTorch', 'OpenAI API', 'Docker', 'PostgreSQL']
 
@@ -253,6 +254,10 @@ export default function Hero({ about, projects, certifications }) {
                   <Icon size={17} />
                 </a>
               ))}
+              <a href={whatsappLink()} target="_blank" rel="noreferrer" aria-label="WhatsApp"
+                className="text-[var(--text-muted)] hover:text-[#25D366] transition-colors">
+                <WhatsAppIcon className="w-[17px] h-[17px]" />
+              </a>
               <button
                 onClick={() => resume && setShowPDF(true)}
                 className={`inline-flex items-center gap-2 px-5 py-2 font-mono text-xs tracking-widest border transition-all duration-200 ${

@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { Github, Linkedin, Twitter, ArrowUp, Mail, MapPin } from 'lucide-react'
 import logoUrl from '../../assets/logo.png'
+import { whatsappLink, WhatsAppIcon } from '../../lib/whatsapp'
 
 const NAV_LINKS = [
   { label: 'About',    href: '#about' },
@@ -59,6 +60,14 @@ export default function Footer({ about }) {
                   <Icon size={14} />
                 </motion.a>
               ))}
+              <motion.a
+                href={whatsappLink()} target="_blank" rel="noreferrer"
+                whileHover={{ y: -3 }} whileTap={{ scale: 0.93 }}
+                className="w-8 h-8 border border-[var(--border-subtle)] flex items-center justify-center text-[var(--text-muted)] hover:text-[#25D366] hover:border-[#25D366] transition-all duration-200"
+                aria-label="WhatsApp"
+              >
+                <WhatsAppIcon className="w-3.5 h-3.5" />
+              </motion.a>
             </div>
           </div>
 
