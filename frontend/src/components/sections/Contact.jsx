@@ -102,10 +102,9 @@ export default function Contact({ about }) {
             <motion.div variants={item}>
               <button
                 onClick={() => window.dispatchEvent(new Event('open-booking'))}
-                className="inline-flex items-center gap-2.5 rounded-full px-6 py-3 font-mono text-sm font-semibold transition-all hover:-translate-y-0.5 hover:brightness-110"
-                style={{ background: 'var(--btn-accent)', color: '#0a0a0a', boxShadow: '0 8px 26px -6px rgba(245,197,24,0.6)' }}
+                className="inline-flex items-center gap-2 rounded-md border border-[var(--btn-accent)] text-[var(--btn-accent)] px-5 py-2.5 font-mono text-xs tracking-widest hover:bg-[var(--btn-accent)] hover:text-black transition-all duration-200"
               >
-                <CalendarClock size={16} /> Book a Call
+                <CalendarClock size={14} /> BOOK A CALL
               </button>
             </motion.div>
           )}
