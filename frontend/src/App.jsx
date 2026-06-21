@@ -13,6 +13,7 @@ import Chatbot from './components/ui/Chatbot'
 import CommandPalette from './components/ui/CommandPalette'
 import BookingModal from './components/ui/BookingModal'
 import WhatsAppFab from './components/ui/WhatsAppFab'
+import LinkedInFab from './components/ui/LinkedInFab'
 import LoadingScreen from './components/ui/LoadingScreen'
 import Navbar from './components/layout/Navbar'
 import Footer from './components/layout/Footer'
@@ -149,6 +150,7 @@ export default function App() {
       {!isAdmin && <CommandPalette />}
       {!isAdmin && <BookingModal />}
       {!isAdmin && <WhatsAppFab />}
+      {!isAdmin && <LinkedInFab />}
     </ErrorBoundary>
   )
 }

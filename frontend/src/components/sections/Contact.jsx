@@ -118,6 +118,17 @@ export default function Contact({ about }) {
             >
               <WhatsAppIcon className="w-4 h-4" /> WhatsApp
             </a>
+            {about?.linkedin_url && (
+              <a
+                href={about.linkedin_url}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2.5 rounded-full px-6 py-3 font-mono text-sm font-semibold transition-all hover:-translate-y-0.5 hover:brightness-110"
+                style={{ background: '#0A66C2', color: '#fff', boxShadow: '0 8px 26px -6px rgba(10,102,194,0.55)' }}
+              >
+                <Linkedin size={16} /> LinkedIn
+              </a>
+            )}
           </motion.div>
 
           {/* Info cards */}
