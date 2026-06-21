@@ -90,11 +90,20 @@ export default function ProjectPage() {
         style={{ background: 'radial-gradient(ellipse 70% 100% at 50% 0%, rgba(245,197,24,0.06) 0%, transparent 70%)' }} />
 
       <div className="relative max-w-6xl mx-auto px-5 md:px-10 py-12">
-        {/* Back */}
-        <motion.button {...cardEnter()} onClick={() => navigate('/#projects')}
-          className="flex items-center gap-2 font-mono text-xs text-[var(--text-muted)] hover:text-[var(--btn-accent)] transition-colors mb-8">
-          <ArrowLeft size={14} /> BACK TO PROJECTS
-        </motion.button>
+        {/* Back — macOS window controls (red dot goes back) */}
+        <motion.div {...cardEnter()} className="group flex items-center gap-2 mb-8 w-fit">
+          <button
+            onClick={() => { navigate('/'); setTimeout(() => document.querySelector('#projects')?.scrollIntoView({ behavior: 'smooth' }), 100) }}
+            aria-label="Back to projects"
+            title="Back to projects"
+            className="w-3.5 h-3.5 rounded-full bg-[#ff5f57] flex items-center justify-center hover:brightness-110 transition"
+          >
+            <X size={9} strokeWidth={3} className="text-black/70 opacity-0 group-hover:opacity-100" />
+          </button>
+          <span className="w-3.5 h-3.5 rounded-full bg-[#febc2e]" />
+          <span className="w-3.5 h-3.5 rounded-full bg-[#28c840]" />
+          <span className="ml-3 font-mono text-[11px] text-[var(--text-muted)]">back to projects</span>
+        </motion.div>
 
         {/* Bento grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-5">
