@@ -36,7 +36,7 @@ export default function Footer({ about }) {
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] pointer-events-none"
         style={{ background: 'radial-gradient(ellipse at 50% 100%, rgba(74,222,128,0.05) 0%, transparent 70%)' }} />
 
-      <div className="relative max-w-7xl mx-auto px-6 md:px-12 lg:px-24 pt-14 pb-8">
+      <div className="relative max-w-[1600px] mx-auto px-6 md:px-12 lg:px-16 pt-14 pb-8">
 
         {/* ── CTA band ── */}
         <motion.div
