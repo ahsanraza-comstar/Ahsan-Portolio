@@ -178,6 +178,7 @@ function ProjectCard({ project, index }) {
 
 export default function Projects({ projects }) {
   const [filter, setFilter] = useState('All')
+  const [loop, setLoop]     = useState(false)
   const items      = projects || []
   const categories = ['All', ...Array.from(new Set(items.map(p => p.category).filter(Boolean)))]
   const visible    = filter === 'All' ? items : items.filter(p => p.category === filter)
@@ -195,15 +196,30 @@ export default function Projects({ projects }) {
     resumeTimer.current = setTimeout(() => { pausedRef.current = false }, 900)
   }
 
+  // Only loop/auto-scroll when one set of cards actually overflows the row —
+  // avoids showing the same project twice when a filter has just 1–2 projects.
+  useEffect(() => {
+    const compute = () => {
+      const el = scrollRef.current
+      if (!el) return
+      const cardW = window.innerWidth < 640 ? 320 : 360   // card width + gap
+      el.scrollLeft = 0
+      setLoop(grid.length * cardW > el.clientWidth + 20)
+    }
+    compute()
+    window.addEventListener('resize', compute)
+    return () => window.removeEventListener('resize', compute)
+  }, [filter, grid.length])
+
   // Auto-scroll the shelf slowly; seamless loop via duplicated cards. Pauses on hover/touch.
   useEffect(() => {
     const el = scrollRef.current
-    if (!el) return
+    if (!el || !loop) return
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
     let raf
     const SPEED = 0.5
     const tick = () => {
-      if (!pausedRef.current && el.scrollWidth > el.clientWidth + 4) {
+      if (!pausedRef.current) {
         const half = el.scrollWidth / 2
         el.scrollLeft += SPEED
         if (el.scrollLeft >= half) el.scrollLeft -= half
@@ -212,7 +228,7 @@ export default function Projects({ projects }) {
     }
     raf = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(raf)
-  }, [filter, grid.length])
+  }, [loop])
 
   return (
     <Section id="projects" bg="deep" reveal={false}>
@@ -261,22 +277,24 @@ export default function Projects({ projects }) {
         </div>
       ) : grid.length > 0 ? (
         <div className="relative">
-          {/* Shelf header: label + arrows */}
-          <div className="flex items-center justify-between mb-4">
-            <p className="font-mono text-[10px] text-[var(--text-muted)] tracking-widest">
-              MORE PROJECTS · hover to pause
-            </p>
-            <div className="hidden md:flex gap-2">
-              <button onClick={() => scrollShelf(-1)} aria-label="Scroll left"
-                className="w-8 h-8 flex items-center justify-center border border-[var(--border-subtle)] text-[var(--text-muted)] hover:border-[var(--amber-bright)] hover:text-[var(--amber-bright)] transition-colors">
-                <ChevronLeft size={16} />
-              </button>
-              <button onClick={() => scrollShelf(1)} aria-label="Scroll right"
-                className="w-8 h-8 flex items-center justify-center border border-[var(--border-subtle)] text-[var(--text-muted)] hover:border-[var(--amber-bright)] hover:text-[var(--amber-bright)] transition-colors">
-                <ChevronRight size={16} />
-              </button>
+          {/* Shelf header: label + arrows (only when the row overflows) */}
+          {loop && (
+            <div className="flex items-center justify-between mb-4">
+              <p className="font-mono text-[10px] text-[var(--text-muted)] tracking-widest">
+                MORE PROJECTS · hover to pause
+              </p>
+              <div className="hidden md:flex gap-2">
+                <button onClick={() => scrollShelf(-1)} aria-label="Scroll left"
+                  className="w-8 h-8 flex items-center justify-center border border-[var(--border-subtle)] text-[var(--text-muted)] hover:border-[var(--amber-bright)] hover:text-[var(--amber-bright)] transition-colors">
+                  <ChevronLeft size={16} />
+                </button>
+                <button onClick={() => scrollShelf(1)} aria-label="Scroll right"
+                  className="w-8 h-8 flex items-center justify-center border border-[var(--border-subtle)] text-[var(--text-muted)] hover:border-[var(--amber-bright)] hover:text-[var(--amber-bright)] transition-colors">
+                  <ChevronRight size={16} />
+                </button>
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Scroll track */}
           <div
@@ -288,7 +306,7 @@ export default function Projects({ projects }) {
             className="overflow-x-auto pb-2 -mx-1 px-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
           >
             <div className="flex gap-5 w-max">
-              {[...grid, ...grid].map((p, i) => (
+              {(loop ? [...grid, ...grid] : grid).map((p, i) => (
                 <div key={`${p.id}-${i}`} className="shrink-0 w-[300px] sm:w-[340px]">
                   <ProjectCard project={p} index={i % grid.length} />
                 </div>
