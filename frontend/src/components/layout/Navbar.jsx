@@ -118,7 +118,7 @@ export default function Navbar() {
           <div className="flex items-center gap-3">
             <button
               onClick={onCTA}
-              className="hidden md:flex items-center gap-1.5 font-mono text-xs tracking-widest border border-[var(--btn-accent)] text-[var(--btn-accent)] px-4 py-2 hover:bg-[var(--btn-accent)] hover:text-black transition-all duration-200"
+              className="hidden md:flex items-center gap-1.5 font-mono text-xs tracking-widest bg-[var(--btn-accent)] text-black px-4 py-2 hover:brightness-110 transition-all duration-200"
             >
               {ctaLabel}
             </button>
@@ -167,7 +167,7 @@ export default function Navbar() {
               ))}
               <button
                 onClick={onCTA}
-                className="mt-4 font-mono text-xs tracking-widest border border-[var(--btn-accent)] text-[var(--btn-accent)] px-4 py-2.5 text-center hover:bg-[var(--btn-accent)] hover:text-black transition-all"
+                className="mt-4 font-mono text-xs tracking-widest bg-[var(--btn-accent)] text-black px-4 py-2.5 text-center hover:brightness-110 transition-all"
               >
                 {ctaLabel}
               </button>
