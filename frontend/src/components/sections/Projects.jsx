@@ -285,7 +285,7 @@ export default function Projects({ projects }) {
             onMouseLeave={() => { pausedRef.current = false }}
             onTouchStart={() => { pausedRef.current = true }}
             onTouchEnd={() => { clearTimeout(resumeTimer.current); resumeTimer.current = setTimeout(() => { pausedRef.current = false }, 1500) }}
-            className="overflow-x-auto pb-4 -mx-1 px-1"
+            className="overflow-x-auto pb-2 -mx-1 px-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
           >
             <div className="flex gap-5 w-max">
               {[...grid, ...grid].map((p, i) => (
