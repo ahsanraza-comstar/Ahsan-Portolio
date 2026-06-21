@@ -8,6 +8,7 @@ import SectionLabel from '../ui/SectionLabel'
 import Input from '../ui/Input'
 import Button from '../ui/Button'
 import { sendMessage } from '../../lib/api'
+import { whatsappLink, WhatsAppIcon } from '../../lib/whatsapp'
 
 const TERMINAL_LINES = [
   { type: 'prompt',   text: '$ whoami' },
@@ -97,20 +98,27 @@ export default function Contact({ about }) {
             </p>
           </motion.div>
 
-          {/* Book a call CTA */}
-          {about?.booking_url && (
-            <motion.div variants={item}>
+          {/* CTAs: Book a call + WhatsApp */}
+          <motion.div variants={item} className="flex flex-wrap gap-3">
+            {about?.booking_url && (
               <button
                 onClick={() => window.dispatchEvent(new Event('open-booking'))}
                 className="inline-flex items-center gap-2.5 rounded-full px-6 py-3 font-mono text-sm font-semibold transition-all hover:-translate-y-0.5 hover:brightness-110"
                 style={{ background: 'var(--btn-accent)', color: '#0a0a0a', boxShadow: '0 8px 26px -6px rgba(245,197,24,0.6)' }}
               >
-                <CalendarClock size={16} />
-                Book a Call
+                <CalendarClock size={16} /> Book a Call
               </button>
-              <p className="text-[var(--text-muted)] text-xs font-mono mt-2">Grab a slot — quick 30-min intro call.</p>
-            </motion.div>
-          )}
+            )}
+            <a
+              href={whatsappLink()}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2.5 rounded-full px-6 py-3 font-mono text-sm font-semibold transition-all hover:-translate-y-0.5 hover:brightness-110"
+              style={{ background: '#25D366', color: '#05240f', boxShadow: '0 8px 26px -6px rgba(37,211,102,0.55)' }}
+            >
+              <WhatsAppIcon className="w-4 h-4" /> WhatsApp
+            </a>
+          </motion.div>
 
           {/* Info cards */}
           <motion.div variants={item} className="space-y-3">
