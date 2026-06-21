@@ -1,6 +1,6 @@
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { ExternalLink, Github, ArrowRight, Star } from 'lucide-react'
+import { useState, useRef } from 'react'
+import { motion } from 'framer-motion'
+import { ExternalLink, Github, ArrowRight, Star, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import Section from '../layout/Section'
 import { useTilt } from '../../hooks/useTilt'
@@ -117,7 +117,7 @@ function ProjectCard({ project, index }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-40px' }}
       transition={{ duration: 0.5, delay: index * 0.07 }}
-      className="group border border-[var(--border-subtle)] bg-[var(--bg-deep)] hover:border-[var(--amber-bright)] transition-colors duration-300 relative overflow-hidden flex flex-col cursor-pointer"
+      className="group h-full border border-[var(--border-subtle)] bg-[var(--bg-deep)] hover:border-[var(--amber-bright)] transition-colors duration-300 relative overflow-hidden flex flex-col cursor-pointer"
       style={{ willChange: 'transform' }}
     >
       <div className="absolute top-0 left-0 right-0 h-px bg-[var(--amber-bright)] scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
@@ -183,6 +183,8 @@ export default function Projects({ projects }) {
   const visible    = filter === 'All' ? items : items.filter(p => p.category === filter)
   const featured   = visible.find(p => p.is_featured)
   const grid       = visible.filter(p => p.id !== featured?.id)
+  const scrollRef  = useRef(null)
+  const scrollShelf = (dir) => scrollRef.current?.scrollBy({ left: dir * 360, behavior: 'smooth' })
 
   return (
     <Section id="projects" bg="deep" reveal={false}>
@@ -223,30 +225,43 @@ export default function Projects({ projects }) {
       {/* Featured */}
       {featured && <FeaturedProject project={featured} />}
 
-      {/* Grid */}
+      {/* Shelf — horizontal scroll */}
       {items.length === 0 ? (
         <div className="py-20 text-center border border-dashed border-[var(--border-subtle)]">
           <p className="font-mono text-xs text-[var(--text-muted)] tracking-widest">NO PROJECTS ADDED YET</p>
           <p className="font-mono text-[10px] text-[var(--text-muted)] opacity-50 mt-1">Add projects from the admin panel</p>
         </div>
-      ) : (
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={filter}
-            className="grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-[var(--border-subtle)]"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-          >
-            {grid.map((p, i) => (
-              <div key={p.id} className="bg-[var(--bg-deep)]">
-                <ProjectCard project={p} index={i} />
-              </div>
-            ))}
-          </motion.div>
-        </AnimatePresence>
-      )}
+      ) : grid.length > 0 ? (
+        <div className="relative">
+          {/* Shelf header: label + arrows */}
+          <div className="flex items-center justify-between mb-4">
+            <p className="font-mono text-[10px] text-[var(--text-muted)] tracking-widest">
+              MORE PROJECTS · drag or scroll →
+            </p>
+            <div className="hidden md:flex gap-2">
+              <button onClick={() => scrollShelf(-1)} aria-label="Scroll left"
+                className="w-8 h-8 flex items-center justify-center border border-[var(--border-subtle)] text-[var(--text-muted)] hover:border-[var(--amber-bright)] hover:text-[var(--amber-bright)] transition-colors">
+                <ChevronLeft size={16} />
+              </button>
+              <button onClick={() => scrollShelf(1)} aria-label="Scroll right"
+                className="w-8 h-8 flex items-center justify-center border border-[var(--border-subtle)] text-[var(--text-muted)] hover:border-[var(--amber-bright)] hover:text-[var(--amber-bright)] transition-colors">
+                <ChevronRight size={16} />
+              </button>
+            </div>
+          </div>
+
+          {/* Scroll track */}
+          <div ref={scrollRef} className="overflow-x-auto snap-x snap-mandatory pb-4 -mx-1 px-1">
+            <div className="flex gap-5 w-max">
+              {grid.map((p, i) => (
+                <div key={p.id} className="snap-start shrink-0 w-[280px] sm:w-[320px]">
+                  <ProjectCard project={p} index={i} />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      ) : null}
     </Section>
   )
 }
