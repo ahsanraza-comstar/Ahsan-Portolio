@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { ExternalLink, Github, ArrowRight, Star, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
@@ -183,8 +183,36 @@ export default function Projects({ projects }) {
   const visible    = filter === 'All' ? items : items.filter(p => p.category === filter)
   const featured   = visible.find(p => p.is_featured)
   const grid       = visible.filter(p => p.id !== featured?.id)
-  const scrollRef  = useRef(null)
-  const scrollShelf = (dir) => scrollRef.current?.scrollBy({ left: dir * 360, behavior: 'smooth' })
+  const scrollRef   = useRef(null)
+  const pausedRef   = useRef(false)
+  const resumeTimer = useRef(null)
+
+  // Arrow click advances exactly one card (card width 340 + gap 20).
+  const scrollShelf = (dir) => {
+    pausedRef.current = true
+    scrollRef.current?.scrollBy({ left: dir * 360, behavior: 'smooth' })
+    clearTimeout(resumeTimer.current)
+    resumeTimer.current = setTimeout(() => { pausedRef.current = false }, 900)
+  }
+
+  // Auto-scroll the shelf slowly; seamless loop via duplicated cards. Pauses on hover/touch.
+  useEffect(() => {
+    const el = scrollRef.current
+    if (!el) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    let raf
+    const SPEED = 0.5
+    const tick = () => {
+      if (!pausedRef.current && el.scrollWidth > el.clientWidth + 4) {
+        const half = el.scrollWidth / 2
+        el.scrollLeft += SPEED
+        if (el.scrollLeft >= half) el.scrollLeft -= half
+      }
+      raf = requestAnimationFrame(tick)
+    }
+    raf = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(raf)
+  }, [filter, grid.length])
 
   return (
     <Section id="projects" bg="deep" reveal={false}>
@@ -236,7 +264,7 @@ export default function Projects({ projects }) {
           {/* Shelf header: label + arrows */}
           <div className="flex items-center justify-between mb-4">
             <p className="font-mono text-[10px] text-[var(--text-muted)] tracking-widest">
-              MORE PROJECTS · drag or scroll →
+              MORE PROJECTS · hover to pause
             </p>
             <div className="hidden md:flex gap-2">
               <button onClick={() => scrollShelf(-1)} aria-label="Scroll left"
@@ -251,11 +279,18 @@ export default function Projects({ projects }) {
           </div>
 
           {/* Scroll track */}
-          <div ref={scrollRef} className="overflow-x-auto snap-x snap-mandatory pb-4 -mx-1 px-1">
+          <div
+            ref={scrollRef}
+            onMouseEnter={() => { pausedRef.current = true }}
+            onMouseLeave={() => { pausedRef.current = false }}
+            onTouchStart={() => { pausedRef.current = true }}
+            onTouchEnd={() => { clearTimeout(resumeTimer.current); resumeTimer.current = setTimeout(() => { pausedRef.current = false }, 1500) }}
+            className="overflow-x-auto pb-4 -mx-1 px-1"
+          >
             <div className="flex gap-5 w-max">
-              {grid.map((p, i) => (
-                <div key={p.id} className="snap-start shrink-0 w-[280px] sm:w-[320px]">
-                  <ProjectCard project={p} index={i} />
+              {[...grid, ...grid].map((p, i) => (
+                <div key={`${p.id}-${i}`} className="shrink-0 w-[300px] sm:w-[340px]">
+                  <ProjectCard project={p} index={i % grid.length} />
                 </div>
               ))}
             </div>
