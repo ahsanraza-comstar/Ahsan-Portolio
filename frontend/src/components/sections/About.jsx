@@ -277,13 +277,14 @@ export default function About({ about, projects, certifications }) {
               className="font-display font-bold text-white mb-5"
               style={{ fontSize: 'clamp(1.8rem, 3.2vw, 3rem)', lineHeight: 1.15 }}
             >
-              Finally you can build{' '}
+              I build{' '}
               <span className="font-mono text-[var(--amber-bright)]">&#123;full-stack&#125;</span>{' '}
-              AI applications in one place.
+              AI applications — end to end.
             </h2>
             <p className="text-[var(--text-body)] text-sm leading-relaxed max-w-lg">
-              Get customized AI-based solutions. A full-stack environment designed especially for
-              developing and facilitating LLMs, FastAPI, React, and other modern frameworks.
+              I&apos;m an AI engineer who takes products from idea to production — training and wiring
+              up LLMs, building FastAPI backends and React frontends, and shipping real systems. I care
+              about clean engineering and measurable impact.
             </p>
           </motion.div>
 

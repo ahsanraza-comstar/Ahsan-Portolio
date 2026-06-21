@@ -5,6 +5,8 @@ export function useCounter(target, duration = 1500) {
   const ref = useRef(null)
   const isVisible = useRef(false)
   const rafId = useRef(null)
+  const targetRef = useRef(target)
+  targetRef.current = target   // always keep the latest target (data may load late)
 
   const animate = (to) => {
     if (rafId.current) cancelAnimationFrame(rafId.current)
@@ -23,7 +25,7 @@ export function useCounter(target, duration = 1500) {
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
         isVisible.current = true
-        if (target > 0) animate(target)
+        if (targetRef.current > 0) animate(targetRef.current)
       }
     }, { threshold: 0.3 })
 
