@@ -53,14 +53,16 @@ function CertCard({ cert, index }) {
       </p>
 
       {/* Footer */}
-      <div className="flex items-center justify-between">
-        <span className="flex items-center gap-1 font-mono text-xs text-[var(--text-muted)]">
-          <Calendar size={10} /> {dateStr}
-        </span>
+      <div className="flex items-center justify-between gap-3">
+        {dateStr ? (
+          <span className="flex items-center gap-1 font-mono text-xs text-[var(--text-muted)]">
+            <Calendar size={10} /> {dateStr}
+          </span>
+        ) : <span />}
         {cert.credential_url && cert.credential_url !== '#' && (
           <a href={cert.credential_url} target="_blank" rel="noreferrer"
-             className="flex items-center gap-1 font-mono text-xs text-[var(--amber-bright)] hover:underline opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            VIEW <ExternalLink size={10} />
+             className="flex items-center gap-1 font-mono text-xs text-[var(--amber-bright)] hover:underline transition-colors duration-300">
+            VIEW CREDENTIAL <ExternalLink size={10} />
           </a>
         )}
       </div>
@@ -81,9 +83,8 @@ export default function Certifications({ certifications }) {
         <div>
           <p className="font-mono text-xs tracking-[0.3em] text-[var(--amber-bright)] uppercase mb-4">&lt; certifications /&gt;</p>
           <h2 className="font-display font-bold text-white" style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)', lineHeight: 1.15 }}>
-            Concentrate on{' '}
             <span className="font-mono text-[var(--amber-bright)]">&#123;credentials&#125;</span>{' '}
-            that matter.
+            that actually matter.
           </h2>
         </div>
         <p className="text-[var(--text-body)] text-sm leading-relaxed lg:max-w-sm lg:ml-auto">
