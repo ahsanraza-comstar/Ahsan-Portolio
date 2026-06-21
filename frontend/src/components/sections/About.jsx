@@ -264,10 +264,10 @@ export default function About({ about, projects, certifications }) {
       <div className="mb-14">
         <p className="font-mono text-xs tracking-[0.3em] text-[var(--amber-bright)] uppercase mb-6">&lt; about /&gt;</p>
 
-        <div className="flex items-start gap-10">
+        <div className="flex flex-col md:flex-row md:items-start gap-8 md:gap-10">
           {/* Heading + tagline */}
           <motion.div
-            className="flex-1 min-w-0"
+            className="order-2 md:order-1 flex-1 min-w-0"
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -288,8 +288,8 @@ export default function About({ about, projects, certifications }) {
             </p>
           </motion.div>
 
-          {/* Photo — same row */}
-          <div className="hidden md:block mt-2 shrink-0">
+          {/* Photo — top on mobile, right on desktop */}
+          <div className="order-1 md:order-2 mt-2 shrink-0 mx-auto md:mx-0">
             <PhotoCard about={about} />
           </div>
         </div>
