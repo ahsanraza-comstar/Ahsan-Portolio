@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useQuery } from '@tanstack/react-query'
-import { Menu, X } from 'lucide-react'
+import { Menu, X, CalendarClock } from 'lucide-react'
 import logoUrl from '../../assets/logo.png'
 import { getAbout } from '../../lib/api'
 
@@ -118,8 +118,9 @@ export default function Navbar() {
           <div className="flex items-center gap-3">
             <button
               onClick={onCTA}
-              className="hidden md:flex items-center gap-1.5 font-mono text-xs tracking-widest bg-[var(--btn-accent)] text-black px-4 py-2 hover:brightness-110 transition-all duration-200"
+              className="hidden md:flex items-center gap-1.5 font-mono text-xs tracking-widest bg-[var(--btn-accent)] text-black px-5 py-2 rounded-full shadow-[0_6px_20px_-4px_rgba(245,197,24,0.55)] hover:shadow-[0_8px_28px_-4px_rgba(245,197,24,0.85)] hover:brightness-110 transition-all duration-200"
             >
+              {hasBooking && <CalendarClock size={13} />}
               {ctaLabel}
             </button>
 
@@ -167,8 +168,9 @@ export default function Navbar() {
               ))}
               <button
                 onClick={onCTA}
-                className="mt-4 font-mono text-xs tracking-widest bg-[var(--btn-accent)] text-black px-4 py-2.5 text-center hover:brightness-110 transition-all"
+                className="mt-4 flex items-center justify-center gap-1.5 font-mono text-xs tracking-widest bg-[var(--btn-accent)] text-black px-5 py-2.5 rounded-full shadow-[0_6px_20px_-4px_rgba(245,197,24,0.55)] hover:brightness-110 transition-all"
               >
+                {hasBooking && <CalendarClock size={13} />}
                 {ctaLabel}
               </button>
             </motion.div>
