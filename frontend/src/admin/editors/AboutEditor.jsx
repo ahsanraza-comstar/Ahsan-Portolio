@@ -331,6 +331,7 @@ export default function AboutEditor() {
           <Field label="GitHub URL"   id="github_url"   reg={register('github_url')} />
           <Field label="LinkedIn URL" id="linkedin_url" reg={register('linkedin_url')} />
           <Field label="Twitter URL"  id="twitter_url"  reg={register('twitter_url')} />
+          <Field label="Booking URL (Calendly)" id="booking_url" reg={register('booking_url')} />
         </div>
       </div>
 

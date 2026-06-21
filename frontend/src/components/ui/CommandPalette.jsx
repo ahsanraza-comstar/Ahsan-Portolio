@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 import {
   Home, User, Wrench, Layers, FolderGit2, Github, Briefcase,
-  Quote, Mail, FileText, Linkedin, Sparkles, ArrowRight,
+  Quote, Mail, FileText, Linkedin, Sparkles, ArrowRight, CalendarClock,
 } from 'lucide-react'
 import { getProjects, getAbout } from '../../lib/api'
 import { slugify } from '../../lib/slug'
@@ -66,6 +66,7 @@ export default function CommandPalette() {
       run: () => navigate(`/projects/${slugify(p.title)}`),
     }))
     cmds.push({ id: 'act-chat', group: 'Actions', label: 'Ask the AI assistant', icon: Sparkles, run: () => window.dispatchEvent(new Event('open-chat')) })
+    if (about?.booking_url) cmds.push({ id: 'act-book', group: 'Actions', label: 'Book a call', icon: CalendarClock, run: () => window.dispatchEvent(new Event('open-booking')) })
     if (about?.resume_url) cmds.push({ id: 'act-resume', group: 'Actions', label: 'Download résumé', icon: FileText, run: () => window.open(about.resume_url, '_blank') })
     if (about?.github_url) cmds.push({ id: 'act-gh', group: 'Actions', label: 'Open GitHub', icon: Github, run: () => window.open(about.github_url, '_blank') })
     if (about?.linkedin_url) cmds.push({ id: 'act-li', group: 'Actions', label: 'Open LinkedIn', icon: Linkedin, run: () => window.open(about.linkedin_url, '_blank') })

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { Mail, MapPin, Github, Linkedin, Twitter, Send, ArrowRight } from 'lucide-react'
+import { Mail, MapPin, Github, Linkedin, Twitter, Send, ArrowRight, CalendarClock } from 'lucide-react'
 import Section from '../layout/Section'
 import SectionLabel from '../ui/SectionLabel'
 import Input from '../ui/Input'
@@ -96,6 +96,22 @@ export default function Contact({ about }) {
               Got a project, a question, or just want to say hi? My inbox is open — I reply within 24 hours.
             </p>
           </motion.div>
+
+          {/* Book a call CTA */}
+          {about?.booking_url && (
+            <motion.div variants={item}>
+              <button
+                onClick={() => window.dispatchEvent(new Event('open-booking'))}
+                className="group inline-flex items-center gap-2.5 rounded-[var(--radius-md)] px-5 py-3 font-mono text-sm font-semibold transition-transform hover:-translate-y-0.5"
+                style={{ background: 'var(--btn-accent)', color: '#0a0a0a' }}
+              >
+                <CalendarClock size={16} />
+                Book a Call
+                <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
+              </button>
+              <p className="text-[var(--text-muted)] text-xs font-mono mt-2">Grab a slot — quick 30-min intro call.</p>
+            </motion.div>
+          )}
 
           {/* Info cards */}
           <motion.div variants={item} className="space-y-3">

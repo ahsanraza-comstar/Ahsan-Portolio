@@ -27,6 +27,7 @@ class AboutBase(BaseModel):
     github_url: Optional[str] = ""
     linkedin_url: Optional[str] = ""
     twitter_url: Optional[str] = ""
+    booking_url: Optional[str] = ""
 
 
 class AboutCreate(AboutBase):
@@ -49,6 +50,7 @@ class AboutUpdate(BaseModel):
     github_url: Optional[str] = None
     linkedin_url: Optional[str] = None
     twitter_url: Optional[str] = None
+    booking_url: Optional[str] = None
 
 
 class AboutOut(AboutBase):

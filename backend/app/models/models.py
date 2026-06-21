@@ -29,6 +29,7 @@ class About(Base):
     github_url = Column(String, default="")
     linkedin_url = Column(String, default="")
     twitter_url = Column(String, default="")
+    booking_url = Column(String, default="")
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
 

@@ -31,6 +31,14 @@ try:
 except Exception:
     pass
 
+# Idempotent migration: add booking_url column to about (Calendly link).
+try:
+    from sqlalchemy import text
+    with engine.begin() as conn:
+        conn.execute(text("ALTER TABLE about ADD COLUMN IF NOT EXISTS booking_url VARCHAR DEFAULT ''"))
+except Exception:
+    pass
+
 # Rate limiter (keyed by IP)
 limiter = Limiter(key_func=get_remote_address, default_limits=["200/minute"])
 
