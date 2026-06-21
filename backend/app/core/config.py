@@ -23,6 +23,10 @@ class Settings(BaseSettings):
     MAIL_SERVER: str = "smtp.gmail.com"
     MAIL_PORT: int = 587
 
+    # GitHub — optional token for the live activity section (raises rate limit
+    # from 60/hr to 5000/hr; public-data only, no scopes needed). Works without it.
+    GITHUB_TOKEN: str = ""
+
     # NVIDIA NIM — portfolio chatbot (OpenAI-compatible API)
     NVIDIA_API_KEY: str = ""
     NVIDIA_MODEL: str = "meta/llama-3.1-8b-instruct"

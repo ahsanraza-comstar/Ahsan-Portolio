@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { Github, Star, Users, BookMarked, ExternalLink } from 'lucide-react'
+import { getGitHub } from '../../lib/api'
 
 const LANG_COLORS = {
   JavaScript: '#f1e05a', TypeScript: '#3178c6', Python: '#3572A5', Dart: '#00B4AB',
@@ -23,24 +24,7 @@ function StatCard({ icon: Icon, value, label }) {
 export default function GitHubStats({ username = 'AhsanRaza-dev' }) {
   const { data, isLoading } = useQuery({
     queryKey: ['github', username],
-    queryFn: async () => {
-      const [pu, pr] = await Promise.all([
-        fetch(`https://api.github.com/users/${username}`),
-        fetch(`https://api.github.com/users/${username}/repos?per_page=100&sort=pushed`),
-      ])
-      const profile = await pu.json()
-      const reposRaw = await pr.json()
-      const repos = Array.isArray(reposRaw) ? reposRaw : []
-      const totalStars = repos.reduce((s, r) => s + (r.stargazers_count || 0), 0)
-      const top = repos
-        .filter(r => !r.fork)
-        .sort((a, b) => (b.stargazers_count - a.stargazers_count) || (new Date(b.pushed_at) - new Date(a.pushed_at)))
-        .slice(0, 6)
-      const langCount = {}
-      repos.forEach(r => { if (r.language) langCount[r.language] = (langCount[r.language] || 0) + 1 })
-      const langs = Object.entries(langCount).sort((a, b) => b[1] - a[1]).slice(0, 8)
-      return { profile, totalStars, top, langs }
-    },
+    queryFn: () => getGitHub(username).then(r => r.data),
     staleTime: 1000 * 60 * 30,
     retry: 1,
   })
